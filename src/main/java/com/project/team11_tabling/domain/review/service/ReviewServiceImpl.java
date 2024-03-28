@@ -29,7 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
     if (booking.getUserId != userId) {
       throw new IllegalArgumentException("본인이 이용한 내역에만 리뷰를 남길 수 있습니다.");
     }
-    if (booking.getState != 1) {
+    if (booking.getState != DONE) {
       throw new IllegalArgumentException("아직 진행중인 사항에는 리뷰를 남길 수 없습니다.");
     }
     Review review = new Review(reviewCreateRequestDto, userId);
