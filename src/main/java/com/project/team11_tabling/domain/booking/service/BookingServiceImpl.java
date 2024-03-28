@@ -4,6 +4,7 @@ import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +32,14 @@ public class BookingServiceImpl implements BookingService {
     bookingRepository.delete(booking);
   }
 
+  @Override
+  public List<BookingResponse> getMyBookings() {
+
+    // TODO: auth
+    List<Booking> myBookings = bookingRepository.findByUserId(1L);
+
+    return myBookings.stream()
+        .map(BookingResponse::new)
+        .toList();
+  }
 }

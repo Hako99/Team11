@@ -4,10 +4,12 @@ import com.project.team11_tabling.domain.booking.service.BookingService;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +42,16 @@ public class BookingController {
     bookingService.deleteBooking(bookingId);
 
     return new ResponseEntity<>("예약이 취소되었습니다.", HttpStatus.OK);
+  }
+
+  @GetMapping("/my")
+  public ResponseEntity<List<BookingResponse>> getMyBookings(
+      // TODO: auth
+  ) {
+
+    List<BookingResponse> responses = bookingService.getMyBookings();
+
+    return new ResponseEntity<>(responses, HttpStatus.OK);
   }
 
 }
