@@ -3,10 +3,8 @@ package com.project.team11_tabling.domain.booking.dto;
 import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
 public class BookingResponse {
 

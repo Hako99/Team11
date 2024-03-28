@@ -20,8 +20,9 @@ public class BookingServiceImpl implements BookingService {
   @Override
   public BookingResponse booking(BookingRequest request) {
 
-    // TODO: ticketing, status, user
-    Booking booking = Booking.of(request);
+    // TODO: user
+    Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
+    Booking booking = Booking.of(request, lastTicketNumber);
 
     return new BookingResponse(bookingRepository.save(booking));
   }

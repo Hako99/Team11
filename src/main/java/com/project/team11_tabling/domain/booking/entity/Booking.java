@@ -46,11 +46,11 @@ public class Booking {
   @Column(nullable = false)
   private Integer reservedParty;
 
-  public static Booking of(BookingRequest request) {
+  public static Booking of(BookingRequest request, Long ticketNumber) {
     return Booking.builder()
         .shopId(request.getShopId())
         .userId(1L)
-        .ticketNumber(1L)
+        .ticketNumber(ticketNumber)
         .state(BookingType.WAITING)
         .reservedDatetime(request.getReservedDatetime())
         .reservedParty(request.getBookingParty())
