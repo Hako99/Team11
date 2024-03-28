@@ -11,4 +11,7 @@ public interface BookingService {
   void deleteBooking(Long bookingId);
 
   List<BookingResponse> getMyBookings();
+
+  BookingResponse completeBooking(Long bookingId);
+
 }

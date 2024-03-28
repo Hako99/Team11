@@ -56,4 +56,8 @@ public class Booking {
         .reservedParty(request.getBookingParty())
         .build();
   }
+
+  public void completeBooking() {
+    this.state = BookingType.DONE;
+  }
 }

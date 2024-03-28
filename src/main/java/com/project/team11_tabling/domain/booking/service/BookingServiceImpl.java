@@ -1,8 +1,8 @@
 package com.project.team11_tabling.domain.booking.service;
 
-import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
+import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +41,16 @@ public class BookingServiceImpl implements BookingService {
     return myBookings.stream()
         .map(BookingResponse::new)
         .toList();
+  }
+
+  @Override
+  public BookingResponse completeBooking(Long bookingId) {
+
+    Booking booking = bookingRepository.findById(bookingId)
+        .orElseThrow(() -> new IllegalArgumentException("없는 예약번호 입니다."));
+
+    booking.completeBooking();
+
+    return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 }
