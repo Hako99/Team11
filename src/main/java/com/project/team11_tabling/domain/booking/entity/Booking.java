@@ -57,11 +57,12 @@ public class Booking {
         .build();
   }
 
-  public void completeBooking() {
-    this.state = BookingType.DONE;
+  public void completeBooking(BookingType type) {
+    this.state = type;
   }
 
   public void cancelBooking() {
     this.state = BookingType.CANCEL;
   }
+
 }

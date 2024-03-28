@@ -2,6 +2,7 @@ package com.project.team11_tabling.domain.booking.controller;
 
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
+import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.service.BookingService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -57,10 +59,11 @@ public class BookingController {
 
   @PutMapping("/{bookingId}")
   public ResponseEntity<BookingResponse> completeBooking(
-      @PathVariable Long bookingId
+      @PathVariable Long bookingId,
+      @RequestParam BookingType type // TODO: 예외처리
   ) {
-    BookingResponse response = bookingService.completeBooking(bookingId);
-    // TODO : done, noShow state
+
+    BookingResponse response = bookingService.completeBooking(bookingId, type);
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

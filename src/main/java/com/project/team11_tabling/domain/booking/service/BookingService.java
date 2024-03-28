@@ -2,6 +2,7 @@ package com.project.team11_tabling.domain.booking.service;
 
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
+import com.project.team11_tabling.domain.booking.entity.BookingType;
 import java.util.List;
 
 public interface BookingService {
@@ -12,6 +13,6 @@ public interface BookingService {
 
   List<BookingResponse> getMyBookings();
 
-  BookingResponse completeBooking(Long bookingId);
+  BookingResponse completeBooking(Long bookingId, BookingType type);
 
 }
