@@ -8,7 +8,7 @@ public interface BookingService {
 
   BookingResponse booking(BookingRequest request);
 
-  void deleteBooking(Long bookingId);
+  BookingResponse cancelBooking(Long bookingId);
 
   List<BookingResponse> getMyBookings();
 

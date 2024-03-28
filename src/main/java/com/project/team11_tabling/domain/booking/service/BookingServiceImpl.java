@@ -26,12 +26,13 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public void deleteBooking(Long bookingId) {
+  public BookingResponse cancelBooking(Long bookingId) {
 
     Booking booking = bookingRepository.findById(bookingId)
         .orElseThrow(() -> new IllegalArgumentException("없는 예약번호 입니다."));
 
-    bookingRepository.delete(booking);
+    booking.cancelBooking();
+    return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 
   @Override

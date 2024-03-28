@@ -60,4 +60,8 @@ public class Booking {
   public void completeBooking() {
     this.state = BookingType.DONE;
   }
+
+  public void cancelBooking() {
+    this.state = BookingType.CANCEL;
+  }
 }

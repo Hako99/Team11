@@ -35,19 +35,19 @@ public class BookingController {
   }
 
   @DeleteMapping("/{bookingId}")
-  public ResponseEntity<String> deleteBooking(
+  public ResponseEntity<BookingResponse> deleteBooking(
       @PathVariable Long bookingId
   ) {
 
     // TODO: auth
-    bookingService.deleteBooking(bookingId);
+    BookingResponse response = bookingService.cancelBooking(bookingId);
 
-    return new ResponseEntity<>("예약이 취소되었습니다.", HttpStatus.OK);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/my")
   public ResponseEntity<List<BookingResponse>> getMyBookings(
-      // TODO: auth
+      // TODO: auth, shopsBookings
   ) {
 
     List<BookingResponse> responses = bookingService.getMyBookings();
@@ -60,9 +60,9 @@ public class BookingController {
       @PathVariable Long bookingId
   ) {
     BookingResponse response = bookingService.completeBooking(bookingId);
+    // TODO : done, noShow state
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
 
 }
