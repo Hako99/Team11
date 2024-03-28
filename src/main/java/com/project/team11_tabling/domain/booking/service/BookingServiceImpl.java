@@ -7,8 +7,10 @@ import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class BookingServiceImpl implements BookingService {
 
@@ -33,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<BookingResponse> getMyBookings() {
 
     // TODO: auth
