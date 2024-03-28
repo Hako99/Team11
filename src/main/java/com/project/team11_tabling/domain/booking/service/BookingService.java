@@ -7,4 +7,5 @@ public interface BookingService {
 
   BookingResponse booking(BookingRequest request);
 
+  void deleteBooking(Long bookingId);
 }

@@ -22,4 +22,13 @@ public class BookingServiceImpl implements BookingService {
     return new BookingResponse(bookingRepository.save(booking));
   }
 
+  @Override
+  public void deleteBooking(Long bookingId) {
+
+    Booking booking = bookingRepository.findById(bookingId)
+        .orElseThrow(() -> new IllegalArgumentException("없는 예약번호 입니다."));
+
+    bookingRepository.delete(booking);
+  }
+
 }
