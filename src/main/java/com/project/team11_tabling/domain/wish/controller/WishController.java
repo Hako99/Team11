@@ -29,7 +29,7 @@ public class WishController {
     return ResponseEntity.ok().body(WishResponse.success(200, "관심 매장으로 등록되었습니다"));
   }
 
-  @GetMapping("/{userId}")
+  @GetMapping
   public ResponseEntity<WishResponse> getMyWishs(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     List<MyWishDto> myWish = wishService.getMyWishs(userDetails.getUser().getUserId());
