@@ -7,6 +7,7 @@ import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
+import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,13 @@ public class BookingServiceImpl implements BookingService {
   private final ShopRepository shopRepository;
 
   @Override
-  public BookingResponse booking(BookingRequest request) {
+  public BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails) {
 
     shopRepository.findById(request.getShopId())
         .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
 
-    // TODO: user
     Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
-    Booking booking = Booking.of(request, lastTicketNumber);
+    Booking booking = Booking.of(request, lastTicketNumber, userDetails.getUserId());
 
     return new BookingResponse(bookingRepository.save(booking));
   }
