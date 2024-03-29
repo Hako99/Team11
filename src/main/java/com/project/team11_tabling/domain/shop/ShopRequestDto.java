@@ -9,5 +9,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class ShopRequestDto {
-    private String keyword;
+     private Long shopId;
+     private String placeName;
+     private String addressName;
+     private String phone;
 }
