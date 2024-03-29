@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface ReviewService {
 
-  void createReview(ReviewCreateRequestDto reviewCreateRequestDto);
+  void createReview(Long userId, ReviewCreateRequestDto reviewCreateRequestDto);
 
-  void updateReview(ReviewUpdateRequestDto reviewUpdateRequestDto);
+  void updateReview(Long userId, ReviewUpdateRequestDto reviewUpdateRequestDto);
 
   GetReviewResponseDto getReview(Long reviewId);
 
- List<GetReviewResponseDto> getMyReviews(Long userId);
+  List<GetReviewResponseDto> getMyReviews(Long userId);
+
+  List<GetReviewResponseDto> getShopReviews(Long shopId);
 
   void deleteReview(Long reviewId, Long userId);
 
