@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/shops")
 public class ShopController {
-  private final ShopServiceImpl shopService;
+  private final ShopService shopService;
 
   @GetMapping
   public ResponseEntity<CommonResponse<KakaoResponseDTO>> searchKeyword(
@@ -28,6 +28,19 @@ public class ShopController {
     return ResponseEntity.status(HttpStatus.OK.value())
         .body(CommonResponse.<KakaoResponseDTO>builder()
             .msg("식당이 조회되었습니다.")
+            .data(responseDTO)
+            .build());
+
+  }
+
+  @PostMapping
+  public ResponseEntity<CommonResponse<KakaoResponseDTO>> registerShop(
+      @RequestParam(value = "search", required = false) String search) {
+
+    KakaoResponseDTO responseDTO = shopService.getAPI(search);
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<KakaoResponseDTO>builder()
+            .msg("식당이 등록되었습니다.")
             .data(responseDTO)
             .build());
 
