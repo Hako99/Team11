@@ -31,21 +31,21 @@ public class ReviewController {
   @PostMapping
   public void createReviews(@AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestBody ReviewCreateRequestDto reviewCreateRequestDto) {
-    reviewService.createReview(userDetails.getUserId, reviewCreateRequestDto);
+    reviewService.createReview(userDetails.getUserId(), reviewCreateRequestDto);
   }
 
   // 리뷰 수정
   @PutMapping
   public void updateReviews(@AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
-    reviewService.updateReview(userDetails.getUserId, reviewUpdateRequestDto);
+    reviewService.updateReview(userDetails.getUserId(), reviewUpdateRequestDto);
   }
 
   // 리뷰 삭제
   @DeleteMapping("/{reviewId}")
   public void deleteReview(@AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long reviewId) {
-    reviewService.deleteReview(userDetails.getUserId, reviewId);
+    reviewService.deleteReview(userDetails.getUserId(), reviewId);
   }
 
   // 리뷰 조회 단일
@@ -59,7 +59,7 @@ public class ReviewController {
   @GetMapping
   public ResponseEntity<CommonResponse<List<GetReviewResponseDto>>> getReviews(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return CommonResponse.ok(reviewService.getMyReviews(userDetails.getUserId));
+    return CommonResponse.ok(reviewService.getMyReviews(userDetails.getUserId()));
   }
 
   // 상점의 리뷰 조회 전체

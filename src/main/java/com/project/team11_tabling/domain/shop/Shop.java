@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "shop")
 @RequiredArgsConstructor
 public class Shop {

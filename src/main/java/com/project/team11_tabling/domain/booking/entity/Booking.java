@@ -1,6 +1,7 @@
 package com.project.team11_tabling.domain.booking.entity;
 
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
+import com.project.team11_tabling.global.util.Timestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,14 +15,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
+@SQLDelete(sql = "update booking set deleted_at = NOW() where id = ?")
+@SQLRestriction(value = "deleted_at is NULL")
 @Table(name = "booking")
-public class Booking {
+public class Booking extends Timestamp {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
