@@ -51,10 +51,9 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<BookingResponse> getMyBookings() {
+  public List<BookingResponse> getMyBookings(UserDetailsImpl userDetails) {
 
-    // TODO: auth
-    List<Booking> myBookings = bookingRepository.findByUserId(1L);
+    List<Booking> myBookings = bookingRepository.findByUserId(userDetails.getUserId());
 
     return myBookings.stream()
         .map(BookingResponse::new)

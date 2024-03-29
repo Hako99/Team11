@@ -52,10 +52,10 @@ public class BookingController {
 
   @GetMapping("/my")
   public ResponseEntity<CommonResponse<List<BookingResponse>>> getMyBookings(
-      // TODO: auth
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    List<BookingResponse> responses = bookingService.getMyBookings();
+    List<BookingResponse> responses = bookingService.getMyBookings(userDetails);
 
     return CommonResponse.ok(responses);
   }
