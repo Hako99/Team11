@@ -63,10 +63,11 @@ public class BookingController {
   @PutMapping("/{bookingId}")
   public ResponseEntity<CommonResponse<BookingResponse>> completeBooking(
       @PathVariable Long bookingId,
-      @RequestParam BookingType type
+      @RequestParam BookingType type,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    BookingResponse response = bookingService.completeBooking(bookingId, type);
+    BookingResponse response = bookingService.completeBooking(bookingId, type, userDetails);
 
     return CommonResponse.ok(response);
   }

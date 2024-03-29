@@ -14,6 +14,6 @@ public interface BookingService {
 
   List<BookingResponse> getMyBookings(UserDetailsImpl userDetails);
 
-  BookingResponse completeBooking(Long bookingId, BookingType type);
+  BookingResponse completeBooking(Long bookingId, BookingType type, UserDetailsImpl userDetails);
 
 }

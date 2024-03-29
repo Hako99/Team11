@@ -38,12 +38,9 @@ public class BookingServiceImpl implements BookingService {
   @Override
   public BookingResponse cancelBooking(Long bookingId, UserDetailsImpl userDetails) {
 
-    Booking booking = bookingRepository.findById(bookingId)
-        .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
+    Booking booking = findBooking(bookingId);
 
-    if (!Objects.equals(booking.getUserId(), userDetails.getUserId())) {
-      throw new UserNotMatchException("예약자만 취소할 수 있습니다.");
-    }
+    validateBookingUser(bookingId, userDetails.getUserId());
 
     booking.cancelBooking();
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
@@ -61,14 +58,26 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public BookingResponse completeBooking(Long bookingId, BookingType type) {
+  public BookingResponse completeBooking(Long bookingId, BookingType type,
+      UserDetailsImpl userDetails) {
 
-    Booking booking = bookingRepository.findById(bookingId)
-        .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
+    Booking booking = findBooking(bookingId);
+
+    validateBookingUser(bookingId, userDetails.getUserId());
 
     booking.completeBooking(type);
-
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
+  }
+
+  private Booking findBooking(Long bookingId) {
+    return bookingRepository.findById(bookingId)
+        .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
+  }
+
+  private void validateBookingUser(Long bookingUserId, Long userId) {
+    if (!Objects.equals(bookingUserId, userId)) {
+      throw new UserNotMatchException("예약자만 취소할 수 있습니다.");
+    }
   }
 
 }
