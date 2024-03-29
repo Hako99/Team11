@@ -10,7 +10,7 @@ public interface BookingService {
 
   BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails);
 
-  BookingResponse cancelBooking(Long bookingId);
+  BookingResponse cancelBooking(Long bookingId, UserDetailsImpl userDetails);
 
   List<BookingResponse> getMyBookings();
 

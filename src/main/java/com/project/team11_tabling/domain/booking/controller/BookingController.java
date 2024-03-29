@@ -41,11 +41,11 @@ public class BookingController {
 
   @DeleteMapping("/{bookingId}")
   public ResponseEntity<CommonResponse<BookingResponse>> deleteBooking(
-      @PathVariable Long bookingId
+      @PathVariable Long bookingId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    // TODO: auth
-    BookingResponse response = bookingService.cancelBooking(bookingId);
+    BookingResponse response = bookingService.cancelBooking(bookingId, userDetails);
 
     return CommonResponse.ok(response);
   }

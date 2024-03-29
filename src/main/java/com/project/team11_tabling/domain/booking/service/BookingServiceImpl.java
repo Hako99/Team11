@@ -7,8 +7,10 @@ import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
+import com.project.team11_tabling.global.exception.custom.UserNotMatchException;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +36,14 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public BookingResponse cancelBooking(Long bookingId) {
+  public BookingResponse cancelBooking(Long bookingId, UserDetailsImpl userDetails) {
 
     Booking booking = bookingRepository.findById(bookingId)
         .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
+
+    if (!Objects.equals(booking.getUserId(), userDetails.getUserId())) {
+      throw new UserNotMatchException("예약자만 취소할 수 있습니다.");
+    }
 
     booking.cancelBooking();
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
