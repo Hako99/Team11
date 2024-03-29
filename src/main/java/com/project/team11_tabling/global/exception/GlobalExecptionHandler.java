@@ -1,6 +1,7 @@
 package com.project.team11_tabling.global.exception;
 
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
+import com.project.team11_tabling.global.exception.custom.UserNotMatchException;
 import com.project.team11_tabling.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class GlobalExecptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
-  @ExceptionHandler(NotFoundException.class)
+  @ExceptionHandler({NotFoundException.class, UserNotMatchException.class})
   public ResponseEntity<ErrorResponse> notFoundException(NotFoundException e) {
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
