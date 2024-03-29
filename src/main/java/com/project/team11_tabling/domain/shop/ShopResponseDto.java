@@ -1,8 +1,30 @@
 package com.project.team11_tabling.domain.shop;
 
+
+import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+
 public class ShopResponseDto {
-  private String shopName;
+  private Long shopId;
+  private String placeName;
+  private String city;
   private String address;
   private String phone;
+  private Date openTime;
+  private Date closeTime;
+
+  public ShopResponseDto(Shop shop){
+    this.shopId = shop.getShopId();
+    this.placeName = shop.getName();
+    this.city = shop.getCity();
+    this.address = shop.getAddress();
+    this.phone = shop.getPhone();
+    this.openTime = shop.getOpenTime();
+    this.closeTime = shop.getCloseTime();
+  }
 
 }

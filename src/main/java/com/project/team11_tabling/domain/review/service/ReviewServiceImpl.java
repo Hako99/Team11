@@ -1,6 +1,8 @@
 package com.project.team11_tabling.domain.review.service;
 
-import com.project.team11_tabling.domain.booking.Entity.Booking;
+import static com.project.team11_tabling.domain.booking.entity.BookingType.DONE;
+
+import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.review.dto.request.ReviewCreateRequestDto;
 import com.project.team11_tabling.domain.review.dto.request.ReviewUpdateRequestDto;
@@ -26,10 +28,10 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   public void createReview(Long userId, ReviewCreateRequestDto reviewCreateRequestDto) {
     Booking booking = findBooking(reviewCreateRequestDto.getBookingId());
-    if (booking.getUserId != userId) {
+    if (booking.getUserId() != userId) {
       throw new IllegalArgumentException("본인이 이용한 내역에만 리뷰를 남길 수 있습니다.");
     }
-    if (booking.getState != DONE) {
+    if (booking.getState() != DONE) {
       throw new IllegalArgumentException("아직 진행중인 사항에는 리뷰를 남길 수 없습니다.");
     }
     Review review = new Review(reviewCreateRequestDto, userId);

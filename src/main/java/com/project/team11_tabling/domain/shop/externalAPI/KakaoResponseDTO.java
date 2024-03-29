@@ -13,7 +13,6 @@ public class KakaoResponseDTO {
 
     public String id;
     public String place_name;
-    public String category_name;
     public String address_name;
     public String phone;
 
