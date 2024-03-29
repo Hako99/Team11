@@ -5,6 +5,8 @@ import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
+import com.project.team11_tabling.domain.shop.ShopRepository;
+import com.project.team11_tabling.global.exception.custom.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookingServiceImpl implements BookingService {
 
   private final BookingRepository bookingRepository;
+  private final ShopRepository shopRepository;
 
   @Override
   public BookingResponse booking(BookingRequest request) {
+
+    shopRepository.findById(request.getShopId())
+        .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
 
     // TODO: user
     Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
@@ -31,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
   public BookingResponse cancelBooking(Long bookingId) {
 
     Booking booking = bookingRepository.findById(bookingId)
-        .orElseThrow(() -> new IllegalArgumentException("없는 예약번호 입니다."));
+        .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
 
     booking.cancelBooking();
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
@@ -53,7 +59,7 @@ public class BookingServiceImpl implements BookingService {
   public BookingResponse completeBooking(Long bookingId, BookingType type) {
 
     Booking booking = bookingRepository.findById(bookingId)
-        .orElseThrow(() -> new IllegalArgumentException("없는 예약번호 입니다."));
+        .orElseThrow(() -> new NotFoundException("줄서기 정보가 없습니다."));
 
     booking.completeBooking(type);
 

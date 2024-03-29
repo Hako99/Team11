@@ -1,5 +1,6 @@
 package com.project.team11_tabling.global.exception;
 
+import com.project.team11_tabling.global.exception.custom.NotFoundException;
 import com.project.team11_tabling.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,13 @@ public class GlobalExecptionHandler {
   public ResponseEntity<ErrorResponse> duplicateException(NullPointerException e) {
     ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorResponse> notFoundException(NotFoundException e) {
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorResponse(e.getMessage()));
   }
 
 }
