@@ -27,21 +27,21 @@ public class User {
   @Column(nullable = false)
   private String password;
   @Column(nullable = false)
-  private Long phoneNumber;
+  private String phoneNumber;
+  @Column(nullable = false)
+  private boolean active = true;
+  @Column(nullable = false)
+  private String userInfo = "자기소개 해주세요";
 
-  public User(String email, String username, String password, Long phoneNumber) {
+  public User(String email, String username, String password, String phoneNumber) {
     this.email = email;
     this.username = username;
     this.password = password;
     this.phoneNumber = phoneNumber;
   }
 
-  public void UpdateUsername(String Username) {
-    this.username = username;
+  public void inActiveUser() {
+    this.active = false;
   }
-
-  public void UpdatePassword(String changePassword) {
-    this.password = changePassword;
-  }
-
 }
+

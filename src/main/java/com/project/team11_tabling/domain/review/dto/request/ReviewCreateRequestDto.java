@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ReviewCreateRequestDto {
+
   private Long shopId;
   private Long bookingId;
   private String description;
