@@ -40,7 +40,7 @@ public class BookingServiceImpl implements BookingService {
 
     Booking booking = findBooking(bookingId);
 
-    validateBookingUser(bookingId, userDetails.getUserId());
+    validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
     booking.cancelBooking();
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
@@ -63,7 +63,7 @@ public class BookingServiceImpl implements BookingService {
 
     Booking booking = findBooking(bookingId);
 
-    validateBookingUser(bookingId, userDetails.getUserId());
+    validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
     booking.completeBooking(type);
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
