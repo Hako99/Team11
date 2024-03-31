@@ -1,19 +1,22 @@
 package com.project.team11_tabling.domain.booking.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
 public class BookingRequest {
 
-  @NotBlank
+  @Positive
+  @NotNull
   private Long shopId;
 
-  @NotBlank
+  @NotNull
   private LocalDateTime reservedDatetime;
 
-  @NotBlank
-  private Integer bookingParty;
+  @Positive
+  @NotNull
+  private Integer reservedParty;
 
 }
