@@ -51,10 +51,10 @@ public class Booking extends Timestamp {
   @Column(nullable = false)
   private Integer reservedParty;
 
-  public static Booking of(BookingRequest request, Long ticketNumber) {
+  public static Booking of(BookingRequest request, Long ticketNumber, Long userId) {
     return Booking.builder()
         .shopId(request.getShopId())
-        .userId(1L)
+        .userId(userId)
         .ticketNumber(ticketNumber)
         .state(BookingType.WAITING)
         .reservedDatetime(request.getReservedDatetime())

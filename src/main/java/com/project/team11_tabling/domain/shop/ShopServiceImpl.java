@@ -24,6 +24,7 @@ public class ShopServiceImpl implements ShopService{
     return response;
   }
 
+
   public ShopResponseDto registerShop(ShopRequestDto requestDto) {
     Shop shop = new Shop(requestDto);
     shop.setTime(randomTime());
@@ -46,5 +47,4 @@ public class ShopServiceImpl implements ShopService{
 
     return date;
   }
-
 }
