@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalTime;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,24 +38,33 @@ public class Shop {
   @Column(nullable = false)
   private String phone;
 
+  @Column(nullable = false)
+  private Integer seats;
+
   @Column
-  private String reviewCount;
+  private Integer reviewCount;
 
   @Column(nullable = false)
-  private Date openTime;
+  private LocalTime openTime;
 
   @Column(nullable = false)
-  private Date closeTime;
+  private LocalTime closeTime;
 
   public Shop(ShopRequestDto requestDto) {
-    this.shopId = requestDto.getShopId();
-    this.address = requestDto.getAddressName();
-    this.city = requestDto.getAddressName().substring(0, 2);
+    this.shopId = requestDto.getId();
+    this.name = requestDto.getPlace_name();
+    this.address = requestDto.getAddress_name();
+    this.city = requestDto.getAddress_name().substring(0, 2);
     this.phone = requestDto.getPhone();
+    this.reviewCount = 0;
   }
 
-  public void setTime(Date[] date) {
-    this.openTime = date[0];
-    this.closeTime = date[1];
+  public void updateTime(LocalTime[] time) {
+    this.openTime = time[0];
+    this.closeTime = time[1];
+  }
+
+  public void updateSeats(Integer num) {
+    this.seats = num;
   }
 }
