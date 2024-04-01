@@ -2,7 +2,6 @@ package com.project.team11_tabling.domain.booking.service;
 
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
-import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
 
@@ -14,6 +13,6 @@ public interface BookingService {
 
   List<BookingResponse> getMyBookings(UserDetailsImpl userDetails);
 
-  BookingResponse completeBooking(Long bookingId, BookingType type, UserDetailsImpl userDetails);
+  BookingResponse noShow(Long bookingId, UserDetailsImpl userDetails);
 
 }

@@ -3,15 +3,17 @@ package com.project.team11_tabling.domain.booking.service;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.Booking;
-import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.shop.ShopRepository;
+import com.project.team11_tabling.global.event.BookingEvent;
+import com.project.team11_tabling.global.event.CallingEvent;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
 import com.project.team11_tabling.global.exception.custom.UserNotMatchException;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +24,23 @@ public class BookingServiceImpl implements BookingService {
 
   private final BookingRepository bookingRepository;
   private final ShopRepository shopRepository;
+  private final ApplicationEventPublisher publisher;
 
   @Override
   public BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails) {
-
+    //TODO: 좌석 계산해서 남아있다면 바로 done 없다면 queue 추가
     shopRepository.findById(request.getShopId())
         .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
 
     Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
     Booking booking = Booking.of(request, lastTicketNumber, userDetails.getUserId());
 
-    return new BookingResponse(bookingRepository.save(booking));
+    Booking saveBooking = bookingRepository.save(booking);
+
+    publisher.publishEvent(new BookingEvent(saveBooking.getShopId(), saveBooking.getUserId()));
+    publisher.publishEvent(new CallingEvent(saveBooking.getShopId()));
+
+    return new BookingResponse(saveBooking);
   }
 
   @Override
@@ -58,14 +66,12 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public BookingResponse completeBooking(Long bookingId, BookingType type,
-      UserDetailsImpl userDetails) {
-
+  public BookingResponse noShow(Long bookingId, UserDetailsImpl userDetails) {
     Booking booking = findBooking(bookingId);
 
     validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
-    booking.completeBooking(type);
+    booking.noShow();
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 

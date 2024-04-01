@@ -62,8 +62,8 @@ public class Booking extends Timestamp {
         .build();
   }
 
-  public void completeBooking(BookingType type) {
-    this.state = type;
+  public void noShow() {
+    this.state = BookingType.NOSHOW;
   }
 
   public void cancelBooking() {
