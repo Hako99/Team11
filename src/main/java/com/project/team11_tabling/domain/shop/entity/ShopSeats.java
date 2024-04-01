@@ -32,6 +32,7 @@ public class ShopSeats {
     return ShopSeats.builder()
         .shopId(shopId)
         .seats(seats)
+        .availableSeats(seats)
         .build();
   }
 
