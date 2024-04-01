@@ -4,11 +4,13 @@ import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.service.BookingService;
+import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import com.project.team11_tabling.global.response.CommonResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,31 +30,32 @@ public class BookingController {
 
   @PostMapping
   public ResponseEntity<CommonResponse<BookingResponse>> booking(
-      @RequestBody @Valid BookingRequest request
+      @RequestBody @Valid BookingRequest request,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    BookingResponse response = bookingService.booking(request);
+    BookingResponse response = bookingService.booking(request, userDetails);
 
     return CommonResponse.ok(response);
   }
 
   @DeleteMapping("/{bookingId}")
   public ResponseEntity<CommonResponse<BookingResponse>> deleteBooking(
-      @PathVariable Long bookingId
+      @PathVariable Long bookingId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    // TODO: auth
-    BookingResponse response = bookingService.cancelBooking(bookingId);
+    BookingResponse response = bookingService.cancelBooking(bookingId, userDetails);
 
     return CommonResponse.ok(response);
   }
 
   @GetMapping("/my")
   public ResponseEntity<CommonResponse<List<BookingResponse>>> getMyBookings(
-      // TODO: auth
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    List<BookingResponse> responses = bookingService.getMyBookings();
+    List<BookingResponse> responses = bookingService.getMyBookings(userDetails);
 
     return CommonResponse.ok(responses);
   }
@@ -60,10 +63,11 @@ public class BookingController {
   @PutMapping("/{bookingId}")
   public ResponseEntity<CommonResponse<BookingResponse>> completeBooking(
       @PathVariable Long bookingId,
-      @RequestParam BookingType type
+      @RequestParam BookingType type,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    BookingResponse response = bookingService.completeBooking(bookingId, type);
+    BookingResponse response = bookingService.completeBooking(bookingId, type, userDetails);
 
     return CommonResponse.ok(response);
   }
