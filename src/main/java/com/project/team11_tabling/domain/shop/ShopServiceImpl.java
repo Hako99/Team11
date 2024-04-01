@@ -26,7 +26,8 @@ public class ShopServiceImpl implements ShopService{
 
   public ShopResponseDto registerShop(ShopRequestDto requestDto) {
     Shop shop = new Shop(requestDto);
-    shop.setTime(randomTime());
+    shop.updateTime(randomTime());
+    shop.updateSeats(randomSeat());
     shopRepository.save(shop);
     return new ShopResponseDto(shop);
   }
@@ -48,6 +49,11 @@ public class ShopServiceImpl implements ShopService{
     date[1] = randomTime2;
 
     return date;
+  }
+
+  public Integer randomSeat(){
+    Random random = new Random();
+    return random.nextInt(10,30);
   }
 
 }

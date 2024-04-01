@@ -39,7 +39,7 @@ public class Shop {
   private String phone;
 
   @Column(nullable = false)
-  private Integer seats; // 좌석수
+  private Integer seats;
 
   @Column
   private Integer reviewCount;
@@ -59,8 +59,12 @@ public class Shop {
     this.reviewCount = 0;
   }
 
-  public void setTime(LocalTime[] time) {
+  public void updateTime(LocalTime[] time) {
     this.openTime = time[0];
     this.closeTime = time[1];
+  }
+
+  public void updateSeats(Integer num) {
+    this.seats = num;
   }
 }
