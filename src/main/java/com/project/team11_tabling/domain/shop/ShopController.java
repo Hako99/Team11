@@ -34,14 +34,14 @@ public class ShopController {
   }
 
   @PostMapping
-  public ResponseEntity<CommonResponse<ShopResponseDto>> registerShop(
-      @RequestBody ShopRequestDto requestDto) {
+  public ResponseEntity<CommonResponse<KakaoResponseDTO>> registerShop(
+      @RequestParam(value = "search", required = false) String search) {
 
-    ShopResponseDto responseDto = shopService.registerShop(requestDto);
+    KakaoResponseDTO responseDTO = shopService.getAPI(search);
     return ResponseEntity.status(HttpStatus.OK.value())
-        .body(CommonResponse.<ShopResponseDto>builder()
+        .body(CommonResponse.<KakaoResponseDTO>builder()
             .msg("식당이 등록되었습니다.")
-            .data(responseDto)
+            .data(responseDTO)
             .build());
 
   }
