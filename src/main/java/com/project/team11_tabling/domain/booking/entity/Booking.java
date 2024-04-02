@@ -58,7 +58,7 @@ public class Booking extends Timestamp {
         .ticketNumber(ticketNumber)
         .state(BookingType.WAITING)
         .reservedDatetime(request.getReservedDatetime())
-        .reservedParty(request.getBookingParty())
+        .reservedParty(request.getReservedParty())
         .build();
   }
 
