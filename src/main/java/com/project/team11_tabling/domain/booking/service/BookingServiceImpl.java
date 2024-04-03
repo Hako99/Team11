@@ -8,14 +8,19 @@ import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
+import com.project.team11_tabling.global.event.DoneEvent;
+import com.project.team11_tabling.global.event.WaitingEvent;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
 import com.project.team11_tabling.global.exception.custom.UserNotMatchException;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Transactional
@@ -25,6 +30,8 @@ public class BookingServiceImpl implements BookingService {
   private final BookingRepository bookingRepository;
   private final ShopRepository shopRepository;
   private final ShopSeatsRepository shopSeatsRepository;
+
+  private final ApplicationEventPublisher eventPublisher;
 
   @Override
   public BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails) {
@@ -37,12 +44,13 @@ public class BookingServiceImpl implements BookingService {
     Booking booking;
     if (shopSeats.getAvailableSeats() > 0) {
       shopSeats.removeSeats();
-      shopSeatsRepository.saveAndFlush(shopSeats);
+      shopSeatsRepository.save(shopSeats);
 
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.DONE);
+//      eventPublisher.publishEvent(new DoneEvent(booking.getShopId(), booking.getUserId()));
     } else {
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.WAITING);
-      // TODO: addQueue
+      eventPublisher.publishEvent(new WaitingEvent(booking.getShopId(), booking.getUserId()));
     }
 
     Booking saveBooking = bookingRepository.save(booking);
@@ -82,7 +90,16 @@ public class BookingServiceImpl implements BookingService {
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 
-  // TODO: DONE 전용 이벤트 메소드
+  @Async
+  @TransactionalEventListener
+  public void doneBooking(DoneEvent doneEvent) {
+    Booking booking = bookingRepository.findByShopIdAndUserId(doneEvent.getShopId(),
+            doneEvent.getUserId())
+        .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
+
+    booking.doneBooking();
+    bookingRepository.save(booking);
+  }
 
   private Booking findBooking(Long bookingId) {
     return bookingRepository.findById(bookingId)
