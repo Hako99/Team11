@@ -8,11 +8,5 @@ public interface AlarmService {
 
   SseEmitter subscribe(Long id);
   SseEmitter subscribeDone(Long id);
-  SseEmitter createEmitter(Long userId);
-  SseEmitter createEmitterDone(Long userId);
-  void sendToClient(Long userId, Object data);
-  void sendMessageAndClose (AlarmFinalEventDto alarmFinalEventDto);
-
-  User findUser (Long userId);
 
 }

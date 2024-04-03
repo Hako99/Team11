@@ -31,15 +31,9 @@ public class AlarmServiceImpl implements AlarmService {
 
   @Override
   public SseEmitter subscribeDone(Long userId) {
-    SseEmitter emitter = createEmitterDone(userId);
-    User user = findUser(userId);
-    sendToClient(userId, user.getUsername() + " 손님 입장해 주시기 바랍니다.");
-    return emitter;
+    return createEmitterDone(userId);
   }
 
-
-
-  @Override
   public SseEmitter createEmitter(Long userId) {
     SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
     alarmSseEmitterRepository.save(userId, emitter);
@@ -50,7 +44,6 @@ public class AlarmServiceImpl implements AlarmService {
     return emitter;
   }
 
-  @Override
   public SseEmitter createEmitterDone(Long userId) {
     SseEmitter emitter = new SseEmitter(1000L);
     alarmSseEmitterRepository.save(userId, emitter);
@@ -61,7 +54,6 @@ public class AlarmServiceImpl implements AlarmService {
     return emitter;
   }
 
-  @Override
   public void sendToClient(Long userId, Object data) {
     SseEmitter emitter = alarmSseEmitterRepository.get(userId);
     if (emitter != null) {
@@ -79,7 +71,6 @@ public class AlarmServiceImpl implements AlarmService {
   }
 
   @EventListener
-  @Override
   public void sendMessageAndClose(AlarmFinalEventDto alarmFinalEventDto) {
     User user = findUser(alarmFinalEventDto.getUserId());
     SseEmitter emitter = alarmSseEmitterRepository.get(user.getUserId());
@@ -93,7 +84,6 @@ public class AlarmServiceImpl implements AlarmService {
     emitter.complete();
   }
 
-  @Override
   public User findUser(Long userId) {
     return userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
