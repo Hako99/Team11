@@ -14,7 +14,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Component
-public class RedisQueue {
+public class WaitingQueue {
 
   private final StringRedisTemplate redisTemplate;
   private final ApplicationEventPublisher eventPublisher;
@@ -23,18 +23,14 @@ public class RedisQueue {
   public void addQueue(WaitingEvent bookingDto) {
     Long shopId = bookingDto.getShopId();
     Long userId = bookingDto.getUserId();
-    redisTemplate.opsForList().rightPush("shop-" + shopId, String.valueOf(userId));
+    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
+
   }
 
   @EventListener
   @Async
   public void popQueue(CallingEvent callingDto) {
-    // keys * 해서userId를 넘김 LIst,
-    // popQueue -> 모든 줄서기가 있는 가게에서 왼쪽에서 한명 씩 다 뺀다.
-    // 이거를 유저아이디를 리스트로 만들어서 알림 서비스에 전달
-    // 스케줄러에서는 그냥 10분마다 popQueue 이벤트를 발생시키기만 하면 끝
-
-    Set<String> keys = redisTemplate.keys("shop-*");
+    Set<String> keys = redisTemplate.keys("*-shop");
 
     if (keys != null && keys.size() > 0) {
       keys.stream()
@@ -44,7 +40,7 @@ public class RedisQueue {
           })
           .map(key -> {
             String userId = redisTemplate.opsForList().leftPop(key);
-            return new DoneEvent(Long.parseLong(key), Long.parseLong(userId));
+            return new DoneEvent(Long.parseLong(key.substring(0, 1)), Long.parseLong(userId));
           })
           .forEach(eventPublisher::publishEvent);
     }

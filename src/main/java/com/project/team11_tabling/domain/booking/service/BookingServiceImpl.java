@@ -47,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
       shopSeatsRepository.save(shopSeats);
 
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.DONE);
-//      eventPublisher.publishEvent(new DoneEvent(booking.getShopId(), booking.getUserId()));
+      eventPublisher.publishEvent(new DoneEvent(booking.getShopId(), booking.getUserId()));
     } else {
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.WAITING);
       eventPublisher.publishEvent(new WaitingEvent(booking.getShopId(), booking.getUserId()));
