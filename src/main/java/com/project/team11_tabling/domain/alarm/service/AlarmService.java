@@ -1,5 +1,7 @@
 package com.project.team11_tabling.domain.alarm.service;
 
+import com.project.team11_tabling.domain.user.entity.User;
+import com.project.team11_tabling.global.event.AlarmFinalEventDto;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface AlarmService {
@@ -9,7 +11,8 @@ public interface AlarmService {
   SseEmitter createEmitter(Long userId);
   SseEmitter createEmitterDone(Long userId);
   void sendToClient(Long userId, Object data);
-  void sendMessage (Long userId, String message);
-  void alarmClose(Long userId);
+  void sendMessageAndClose (AlarmFinalEventDto alarmFinalEventDto);
+
+  User findUser (Long userId);
 
 }

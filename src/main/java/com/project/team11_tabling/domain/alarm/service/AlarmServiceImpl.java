@@ -3,9 +3,11 @@ package com.project.team11_tabling.domain.alarm.service;
 import com.project.team11_tabling.domain.alarm.repository.AlarmSseEmitterRepository;
 import com.project.team11_tabling.domain.user.entity.User;
 import com.project.team11_tabling.domain.user.repository.UserRepository;
+import com.project.team11_tabling.global.event.AlarmFinalEventDto;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -35,9 +37,7 @@ public class AlarmServiceImpl implements AlarmService {
     return emitter;
   }
 
-  public User findUser (Long userId){
-    return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
-  }
+
 
   @Override
   public SseEmitter createEmitter(Long userId) {
@@ -49,6 +49,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     return emitter;
   }
+
   @Override
   public SseEmitter createEmitterDone(Long userId) {
     SseEmitter emitter = new SseEmitter(1000L);
@@ -77,21 +78,24 @@ public class AlarmServiceImpl implements AlarmService {
     }
   }
 
+  @EventListener
   @Override
-  public void sendMessage(Long userId, String message) {
-    SseEmitter emitter = alarmSseEmitterRepository.get(userId);
-    User user = findUser(userId);
+  public void sendMessageAndClose(AlarmFinalEventDto alarmFinalEventDto) {
+    User user = findUser(alarmFinalEventDto.getUserId());
+    SseEmitter emitter = alarmSseEmitterRepository.get(user.getUserId());
     try {
       emitter.send(SseEmitter.event()
-          .name(user.getUsername()+" 손님")
-          .data(message));
+          .name(user.getUsername() + " 손님")
+          .data(alarmFinalEventDto.getMessage()));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-  @Override
-  public void alarmClose(Long userId){
-    SseEmitter emitter = alarmSseEmitterRepository.get(userId);
     emitter.complete();
+  }
+
+  @Override
+  public User findUser(Long userId) {
+    return userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
   }
 }
