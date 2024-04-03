@@ -32,10 +32,15 @@ public class ShopSeats {
     return ShopSeats.builder()
         .shopId(shopId)
         .seats(seats)
+        .availableSeats(seats)
         .build();
   }
 
   public void addAvailableSeat() {
     this.availableSeats ++;
+  }
+  
+  public void removeSeats() {
+    this.availableSeats--;
   }
 }
