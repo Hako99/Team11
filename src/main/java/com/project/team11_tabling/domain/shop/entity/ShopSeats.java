@@ -35,4 +35,7 @@ public class ShopSeats {
         .build();
   }
 
+  public void addAvailableSeat() {
+    this.availableSeats ++;
+  }
 }

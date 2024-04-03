@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ScheduledTasks {
+public class TaskScheduler {
 
   private final ShopSeatsRepository shopSeatsRepository;
-
-  @Scheduled(fixedDelay = 3000, initialDelay = 3000)
+  @Scheduled(fixedDelay = 600000)
   public void addAvailableSeat() {
     List<ShopSeats> shopSeats = shopSeatsRepository.findAll();
     for (ShopSeats s : shopSeats) {
