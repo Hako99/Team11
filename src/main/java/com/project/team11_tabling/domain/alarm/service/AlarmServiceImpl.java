@@ -34,17 +34,16 @@ public class AlarmServiceImpl implements AlarmService {
     return createEmitterDone(userId);
   }
 
-  public SseEmitter createEmitter(Long userId) {
+  private SseEmitter createEmitter(Long userId) {
     SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
     alarmSseEmitterRepository.save(userId, emitter);
 
     emitter.onCompletion(() -> alarmSseEmitterRepository.deleteById(userId));
     emitter.onTimeout(() -> alarmSseEmitterRepository.deleteById(userId));
-
     return emitter;
   }
 
-  public SseEmitter createEmitterDone(Long userId) {
+  private SseEmitter createEmitterDone(Long userId) {
     SseEmitter emitter = new SseEmitter(1000L);
     alarmSseEmitterRepository.save(userId, emitter);
 
@@ -54,7 +53,7 @@ public class AlarmServiceImpl implements AlarmService {
     return emitter;
   }
 
-  public void sendToClient(Long userId, Object data) {
+  private void sendToClient(Long userId, Object data) {
     SseEmitter emitter = alarmSseEmitterRepository.get(userId);
     if (emitter != null) {
       try {
@@ -71,7 +70,7 @@ public class AlarmServiceImpl implements AlarmService {
   }
 
   @EventListener
-  public void sendMessageAndClose(AlarmFinalEventDto alarmFinalEventDto) {
+  private void sendMessageAndClose(AlarmFinalEventDto alarmFinalEventDto) {
     User user = findUser(alarmFinalEventDto.getUserId());
     SseEmitter emitter = alarmSseEmitterRepository.get(user.getUserId());
     try {
@@ -84,7 +83,7 @@ public class AlarmServiceImpl implements AlarmService {
     emitter.complete();
   }
 
-  public User findUser(Long userId) {
+  private User findUser(Long userId) {
     return userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
   }
