@@ -2,7 +2,6 @@ package com.project.team11_tabling.domain.booking.controller;
 
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
-import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.service.BookingService;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import com.project.team11_tabling.global.response.CommonResponse;
@@ -18,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,18 +28,15 @@ public class BookingController {
   private final BookingService bookingService;
 
   @PostMapping
-  public ResponseEntity<CommonResponse<BookingResponse>> booking(
+  public SseEmitter booking(
       @RequestBody @Valid BookingRequest request,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-
-    BookingResponse response = bookingService.booking(request, userDetails);
-
-    return CommonResponse.ok(response);
+    return bookingService.booking(request, userDetails);
   }
 
   @DeleteMapping("/{bookingId}")
-  public ResponseEntity<CommonResponse<BookingResponse>> deleteBooking(
+  public ResponseEntity<CommonResponse<BookingResponse>> cancelBooking(
       @PathVariable Long bookingId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
@@ -61,13 +57,12 @@ public class BookingController {
   }
 
   @PutMapping("/{bookingId}")
-  public ResponseEntity<CommonResponse<BookingResponse>> completeBooking(
+  public ResponseEntity<CommonResponse<BookingResponse>> noShow(
       @PathVariable Long bookingId,
-      @RequestParam BookingType type,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
 
-    BookingResponse response = bookingService.completeBooking(bookingId, type, userDetails);
+    BookingResponse response = bookingService.noShow(bookingId, userDetails);
 
     return CommonResponse.ok(response);
   }
