@@ -23,8 +23,8 @@ public class WaitingQueue {
   public void addQueue(WaitingEvent bookingDto) {
     Long shopId = bookingDto.getShopId();
     Long userId = bookingDto.getUserId();
-    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
 
+    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
   }
 
   @EventListener
@@ -44,7 +44,6 @@ public class WaitingQueue {
           })
           .forEach(eventPublisher::publishEvent);
     }
-
   }
 
 }
