@@ -48,20 +48,19 @@ public class AlarmServiceImpl implements AlarmService {
       try {
         emitter.send(SseEmitter.event()
             .name(user.getUsername() + " 손님")
-            .data(message));
+            .data(user.getUsername() + message));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-
-      emitter.complete();
     } else {
       try {
         emitter.send(SseEmitter.event()
             .name(user.getUsername() + " 손님")
-            .data(message));
+            .data(user.getUsername() + message));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
+        emitter.complete();
     }
   }
 
