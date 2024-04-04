@@ -1,5 +1,6 @@
 package com.project.team11_tabling.domain.booking.service;
 
+import com.project.team11_tabling.domain.alarm.service.AlarmService;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.Booking;
@@ -8,6 +9,7 @@ import com.project.team11_tabling.domain.booking.repository.BookingRepository;
 import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
+import com.project.team11_tabling.global.event.AlarmFinalEventDto;
 import com.project.team11_tabling.global.event.DoneEvent;
 import com.project.team11_tabling.global.event.WaitingEvent;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
@@ -21,6 +23,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RequiredArgsConstructor
 @Transactional
@@ -30,11 +33,12 @@ public class BookingServiceImpl implements BookingService {
   private final BookingRepository bookingRepository;
   private final ShopRepository shopRepository;
   private final ShopSeatsRepository shopSeatsRepository;
-
+  private final AlarmService alarmService;
   private final ApplicationEventPublisher eventPublisher;
 
+
   @Override
-  public BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails) {
+  public SseEmitter booking(BookingRequest request, UserDetailsImpl userDetails) {
     shopRepository.findById(request.getShopId())
         .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
 
@@ -48,14 +52,14 @@ public class BookingServiceImpl implements BookingService {
 
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.DONE);
       eventPublisher.publishEvent(new DoneEvent(booking.getShopId(), booking.getUserId()));
+      bookingRepository.save(booking);
+      return alarmService.subscribeDone(userDetails.getUserId());
     } else {
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.WAITING);
       eventPublisher.publishEvent(new WaitingEvent(booking.getShopId(), booking.getUserId()));
+      bookingRepository.save(booking);
+      return alarmService.subscribe(userDetails.getUserId());
     }
-
-    Booking saveBooking = bookingRepository.save(booking);
-
-    return new BookingResponse(saveBooking);
   }
 
   @Override
@@ -66,7 +70,11 @@ public class BookingServiceImpl implements BookingService {
     validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
     booking.cancelBooking();
+    eventPublisher.publishEvent(
+        new AlarmFinalEventDto(" 손님 줄서기를 취소하셨습니다.", userDetails.getUserId()));
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
+
+
   }
 
   @Override
@@ -87,6 +95,8 @@ public class BookingServiceImpl implements BookingService {
     validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
     booking.noShow();
+    eventPublisher.publishEvent(
+        new AlarmFinalEventDto(" 손님 입장 시간이 초과하여 입장 취소되었습니다.", userDetails.getUserId()));
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 
@@ -96,8 +106,9 @@ public class BookingServiceImpl implements BookingService {
     Booking booking = bookingRepository.findByShopIdAndUserId(doneEvent.getShopId(),
             doneEvent.getUserId())
         .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
-
     booking.doneBooking();
+    eventPublisher.publishEvent(
+        new AlarmFinalEventDto(" 손님이 입장완료 되었습니다.", booking.getUserId()));
     bookingRepository.save(booking);
   }
 
