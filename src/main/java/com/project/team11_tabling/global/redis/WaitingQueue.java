@@ -1,6 +1,7 @@
 package com.project.team11_tabling.global.redis;
 
 import com.project.team11_tabling.global.event.CallingEvent;
+import com.project.team11_tabling.global.event.CancelEvent;
 import com.project.team11_tabling.global.event.DoneEvent;
 import com.project.team11_tabling.global.event.WaitingEvent;
 import java.util.Set;
@@ -18,19 +19,20 @@ public class WaitingQueue {
 
   private final StringRedisTemplate redisTemplate;
   private final ApplicationEventPublisher eventPublisher;
+  private static final String WAITING_QUEUE_SUFFIX = "-shop";
 
   @TransactionalEventListener
   public void addQueue(WaitingEvent bookingDto) {
     Long shopId = bookingDto.getShopId();
     Long userId = bookingDto.getUserId();
 
-    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
+    redisTemplate.opsForList().rightPush(shopId + WAITING_QUEUE_SUFFIX, String.valueOf(userId));
   }
 
   @EventListener
   @Async
   public void popQueue(CallingEvent callingDto) {
-    Set<String> keys = redisTemplate.keys("*-shop");
+    Set<String> keys = redisTemplate.keys("*" + WAITING_QUEUE_SUFFIX);
 
     if (keys != null && keys.size() > 0) {
       keys.stream()
@@ -45,5 +47,17 @@ public class WaitingQueue {
           .forEach(eventPublisher::publishEvent);
     }
   }
+
+  @TransactionalEventListener
+  public void removeWaitingQueue(CancelEvent cancelEvent) {
+    System.out.println("WaitingQueue.removeWaitingQueue");
+    Long shopId = cancelEvent.getShopId();
+    Long userId = cancelEvent.getUserId();
+
+    redisTemplate.opsForList()
+        .remove(shopId + WAITING_QUEUE_SUFFIX, 0, String.valueOf(userId));
+  }
+
+  // TODO : 가게 매장별 웨이팅 수 카운팅
 
 }

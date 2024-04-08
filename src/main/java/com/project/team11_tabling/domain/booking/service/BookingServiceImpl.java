@@ -10,6 +10,7 @@ import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
 import com.project.team11_tabling.global.event.AlarmEvent;
+import com.project.team11_tabling.global.event.CancelEvent;
 import com.project.team11_tabling.global.event.DoneEvent;
 import com.project.team11_tabling.global.event.WaitingEvent;
 import com.project.team11_tabling.global.exception.custom.NotFoundException;
@@ -44,6 +45,8 @@ public class BookingServiceImpl implements BookingService {
     Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
     ShopSeats shopSeats = shopSeatsRepository.findByShopId(request.getShopId());
 
+    // TODO : 중복 줄서기 막기
+
     Booking booking;
     if (shopSeats.getAvailableSeats() > 0) {
       shopSeats.removeAvailableSeats();
@@ -68,6 +71,7 @@ public class BookingServiceImpl implements BookingService {
     validateBookingUser(booking.getUserId(), userDetails.getUserId());
 
     booking.cancelBooking();
+    eventPublisher.publishEvent(new CancelEvent(booking.getShopId(), booking.getUserId()));
     eventPublisher.publishEvent(new AlarmEvent(booking));
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
@@ -97,6 +101,8 @@ public class BookingServiceImpl implements BookingService {
   @Async
   @TransactionalEventListener
   public void doneBooking(DoneEvent doneEvent) {
+
+    // TODO : validation 조건 수정
     Booking booking = bookingRepository.findByShopIdAndUserId(
             doneEvent.getShopId(), doneEvent.getUserId())
         .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
