@@ -15,7 +15,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Component
-public class WaitingQueue {
+public class WaitingQueueService {
 
   private final StringRedisTemplate redisTemplate;
   private final ApplicationEventPublisher eventPublisher;
