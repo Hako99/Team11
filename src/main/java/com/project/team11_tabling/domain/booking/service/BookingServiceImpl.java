@@ -45,7 +45,10 @@ public class BookingServiceImpl implements BookingService {
     Long lastTicketNumber = bookingRepository.findLastTicketNumberByShopId(request.getShopId());
     ShopSeats shopSeats = shopSeatsRepository.findByShopId(request.getShopId());
 
-    // TODO : 중복 줄서기 막기
+    bookingRepository.findByShopIdAndUserId(request.getShopId(), userDetails.getUserId())
+        .ifPresent(booking -> {
+          throw new IllegalArgumentException("이미 줄서기를 하고 있습니다.");
+        });
 
     Booking booking;
     if (shopSeats.getAvailableSeats() > 0) {
@@ -101,8 +104,6 @@ public class BookingServiceImpl implements BookingService {
   @Async
   @TransactionalEventListener
   public void doneBooking(DoneEvent doneEvent) {
-
-    // TODO : validation 조건 수정
     Booking booking = bookingRepository.findByShopIdAndUserId(
             doneEvent.getShopId(), doneEvent.getUserId())
         .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
