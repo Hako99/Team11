@@ -20,6 +20,8 @@ public class ShopScheduler {
 
   @Scheduled(fixedDelay = 600000)
   public void addAvailableSeat() {
+    log.info("addAvailableSeat");
+
     List<ShopSeats> shopSeats = shopSeatsRepository.findAll();
 
     for (ShopSeats s : shopSeats) {
