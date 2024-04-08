@@ -46,12 +46,12 @@ public class BookingRepositoryQueryImpl implements BookingRepositoryQuery {
             .where(
                 booking.state.eq(BookingType.WAITING)
                     .and(booking.userId.eq(userId))
-                    .and(dateStringTemplate.eq(String.valueOf(LocalDate.now())))
                     .and(booking.shopId.eq(shopId))
+                    .and(dateStringTemplate.eq(String.valueOf(LocalDate.now())))
             )
             .fetchFirst();
 
-    return Optional.of(findBooking);
+    return findBooking == null ? Optional.empty() : Optional.of(findBooking);
   }
 
   private static StringTemplate getDateStringTemplate() {
