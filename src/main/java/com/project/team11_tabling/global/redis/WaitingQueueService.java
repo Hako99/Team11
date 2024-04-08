@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "WaitingQueueService")
 @Component
 public class WaitingQueueService {
 
