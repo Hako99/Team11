@@ -19,6 +19,7 @@ import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RequiredArgsConstructor
 @Transactional
+@Slf4j(topic = "BookingServiceImpl")
 @Service
 public class BookingServiceImpl implements BookingService {
 
@@ -104,6 +106,9 @@ public class BookingServiceImpl implements BookingService {
   @Async
   @TransactionalEventListener
   public void doneBooking(DoneEvent doneEvent) {
+    log.info("doneBookingEvent:: shopId = {}, userId = {}",
+        doneEvent.getShopId(), doneEvent.getUserId());
+
     Booking booking = bookingRepository.findByShopIdAndUserId(
             doneEvent.getShopId(), doneEvent.getUserId())
         .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
