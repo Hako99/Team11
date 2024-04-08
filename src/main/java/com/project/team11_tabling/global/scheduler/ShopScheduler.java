@@ -11,9 +11,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
+@Slf4j(topic = "ShopScheduler")
 @RequiredArgsConstructor
-public class TaskScheduler {
+public class ShopScheduler {
 
   private final ShopSeatsRepository shopSeatsRepository;
   private final ApplicationEventPublisher eventPublisher;
