@@ -30,7 +30,7 @@ public class WaitingQueueService {
 
     log.info("addWaitingQueue:: shopId = {}, userId = {}", shopId, userId);
 
-    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
+    redisTemplate.opsForList().rightPush(shopId + WAITING_QUEUE_SUFFIX, String.valueOf(userId));
   }
 
   @EventListener
