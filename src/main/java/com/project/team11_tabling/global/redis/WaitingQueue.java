@@ -58,6 +58,11 @@ public class WaitingQueue {
         .remove(shopId + WAITING_QUEUE_SUFFIX, 0, String.valueOf(userId));
   }
 
-  // TODO : 가게 매장별 웨이팅 수 카운팅
+  public Long getWaitingQueueSize(Long shopId) {
+    Long size = redisTemplate.opsForList()
+        .size(shopId + WAITING_QUEUE_SUFFIX);
+
+    return size == null ? 0 : size;
+  }
 
 }
