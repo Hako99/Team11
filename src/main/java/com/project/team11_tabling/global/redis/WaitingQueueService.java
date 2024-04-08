@@ -6,6 +6,7 @@ import com.project.team11_tabling.global.event.DoneEvent;
 import com.project.team11_tabling.global.event.WaitingEvent;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
+@Slf4j
 @Component
 public class WaitingQueueService {
 
@@ -22,16 +24,20 @@ public class WaitingQueueService {
   private static final String WAITING_QUEUE_SUFFIX = "-shop";
 
   @TransactionalEventListener
-  public void addQueue(WaitingEvent bookingDto) {
-    Long shopId = bookingDto.getShopId();
-    Long userId = bookingDto.getUserId();
+  public void addWaitingQueue(WaitingEvent waitingEvent) {
+    Long shopId = waitingEvent.getShopId();
+    Long userId = waitingEvent.getUserId();
 
-    redisTemplate.opsForList().rightPush(shopId + WAITING_QUEUE_SUFFIX, String.valueOf(userId));
+    log.info("addWaitingQueue:: shopId = {}, userId = {}", shopId, userId);
+
+    redisTemplate.opsForList().rightPush(shopId + "-shop", String.valueOf(userId));
   }
 
   @EventListener
   @Async
-  public void popQueue(CallingEvent callingDto) {
+  public void popWaitingQueue(CallingEvent callingDto) {
+    log.info("popWaitingQueue");
+
     Set<String> keys = redisTemplate.keys("*" + WAITING_QUEUE_SUFFIX);
 
     if (keys != null && keys.size() > 0) {
@@ -50,9 +56,10 @@ public class WaitingQueueService {
 
   @TransactionalEventListener
   public void removeWaitingQueue(CancelEvent cancelEvent) {
-    System.out.println("WaitingQueue.removeWaitingQueue");
     Long shopId = cancelEvent.getShopId();
     Long userId = cancelEvent.getUserId();
+
+    log.info("removeWaitingQueue:: shopId = {}, userId = {}", shopId, userId);
 
     redisTemplate.opsForList()
         .remove(shopId + WAITING_QUEUE_SUFFIX, 0, String.valueOf(userId));
