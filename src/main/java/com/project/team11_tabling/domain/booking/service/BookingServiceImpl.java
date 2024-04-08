@@ -46,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
 
     Booking booking;
     if (shopSeats.getAvailableSeats() > 0) {
-      shopSeats.removeSeats();
+      shopSeats.removeAvailableSeats();
       shopSeatsRepository.save(shopSeats);
 
       booking = Booking.of(request, lastTicketNumber, userDetails.getUserId(), BookingType.DONE);
@@ -100,6 +100,10 @@ public class BookingServiceImpl implements BookingService {
     Booking booking = bookingRepository.findByShopIdAndUserId(
             doneEvent.getShopId(), doneEvent.getUserId())
         .orElseThrow(() -> new NotFoundException("잘못된 줄서기 정보입니다."));
+
+    ShopSeats shopSeats = shopSeatsRepository.findByShopId(doneEvent.getShopId());
+    shopSeats.removeAvailableSeats();
+    shopSeatsRepository.save(shopSeats);
 
     booking.doneBooking();
     eventPublisher.publishEvent(new AlarmEvent(booking));

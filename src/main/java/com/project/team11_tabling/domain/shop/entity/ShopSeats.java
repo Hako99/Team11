@@ -39,8 +39,8 @@ public class ShopSeats {
   public void addAvailableSeat() {
     this.availableSeats ++;
   }
-
-  public void removeSeats() {
+  
+  public void removeAvailableSeats() {
     this.availableSeats--;
   }
 }
