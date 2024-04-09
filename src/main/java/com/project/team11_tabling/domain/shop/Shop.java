@@ -53,19 +53,7 @@ public class Shop {
     this.phone = requestDto.getPhone();
     this.reviewCount = 0;
   }
-
-  public Shop(Long shopId, String name, String address, String city, String phone,
-      Integer reviewCount, LocalTime openTime, LocalTime closeTime) {
-    this.shopId = shopId;
-    this.name = name;
-    this.address = address;
-    this.city = city;
-    this.phone = phone;
-    this.reviewCount = reviewCount;
-    this.openTime = openTime;
-    this.closeTime = closeTime;
-  }
-
+  
   public void updateTime(LocalTime[] time) {
     this.openTime = time[0];
     this.closeTime = time[1];
