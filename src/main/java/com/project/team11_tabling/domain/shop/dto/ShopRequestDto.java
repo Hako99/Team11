@@ -1,4 +1,4 @@
-package com.project.team11_tabling.domain.shop;
+package com.project.team11_tabling.domain.shop.dto;
 
 
 import lombok.Getter;

@@ -6,7 +6,7 @@ import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import com.project.team11_tabling.domain.booking.repository.BookingRepository;
-import com.project.team11_tabling.domain.shop.ShopRepository;
+import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
 import com.project.team11_tabling.global.event.AlarmEvent;
