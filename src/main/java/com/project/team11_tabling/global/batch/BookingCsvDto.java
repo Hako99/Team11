@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingCsvDto extends Booking{
+public class BookingCsvDto {
 
   private Long userId;
   private Long shopId;
