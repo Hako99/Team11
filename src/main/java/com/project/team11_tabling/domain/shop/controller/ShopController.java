@@ -1,13 +1,15 @@
-package com.project.team11_tabling.domain.shop;
+package com.project.team11_tabling.domain.shop.controller;
 
 
+import com.project.team11_tabling.domain.shop.service.ShopService;
+import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
+import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
-import java.io.UnsupportedEncodingException;
+import com.project.team11_tabling.global.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,6 @@ public class ShopController {
     KakaoResponseDTO responseDTO = shopService.getAPI(search);
     return ResponseEntity.status(HttpStatus.OK.value())
         .body(CommonResponse.<KakaoResponseDTO>builder()
-            .msg("식당이 조회되었습니다.")
             .data(responseDTO)
             .build());
 
@@ -40,7 +41,6 @@ public class ShopController {
     ShopResponseDto responseDto = shopService.registerShop(requestDto);
     return ResponseEntity.status(HttpStatus.OK.value())
         .body(CommonResponse.<ShopResponseDto>builder()
-            .msg("식당이 등록되었습니다.")
             .data(responseDto)
             .build());
 

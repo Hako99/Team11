@@ -1,7 +1,7 @@
 package com.project.team11_tabling.domain.wish.service;
 
-import com.project.team11_tabling.domain.shop.Shop;
-import com.project.team11_tabling.domain.shop.ShopRepository;
+import com.project.team11_tabling.domain.shop.entity.Shop;
+import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.user.entity.User;
 import com.project.team11_tabling.domain.wish.dto.response.MyWishDto;
 import com.project.team11_tabling.domain.wish.entity.Wish;

@@ -1,6 +1,7 @@
-package com.project.team11_tabling.domain.shop;
+package com.project.team11_tabling.domain.shop.entity;
 
 
+import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

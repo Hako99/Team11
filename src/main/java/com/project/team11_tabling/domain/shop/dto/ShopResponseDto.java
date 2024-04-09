@@ -1,6 +1,7 @@
-package com.project.team11_tabling.domain.shop;
+package com.project.team11_tabling.domain.shop.dto;
 
 
+import com.project.team11_tabling.domain.shop.entity.Shop;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
