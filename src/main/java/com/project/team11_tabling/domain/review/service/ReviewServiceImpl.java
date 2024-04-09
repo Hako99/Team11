@@ -38,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
     reviewRepository.save(review);
   }
 
-  public Booking findBooking(Long bookingId) {
+  private Booking findBooking(Long bookingId) {
     return bookingRepository.findById(bookingId)
         .orElseThrow(() -> new EntityNotFoundException("줄서기 정보가 없습니다."));
   }
@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService {
     return new GetReviewResponseDto(review);
   }
 
-  public Review findReview(Long reviewId) {
+  private Review findReview(Long reviewId) {
     return reviewRepository.findById(reviewId)
         .orElseThrow(() -> new NullPointerException("리뷰가 존재하지 않습니다."));
   }

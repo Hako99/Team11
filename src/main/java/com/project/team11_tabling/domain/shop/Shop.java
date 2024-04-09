@@ -8,8 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalTime;
-import java.util.Date;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -38,9 +36,6 @@ public class Shop {
   @Column(nullable = false)
   private String phone;
 
-  @Column(nullable = false)
-  private Integer seats;
-
   @Column
   private Integer reviewCount;
 
@@ -64,7 +59,4 @@ public class Shop {
     this.closeTime = time[1];
   }
 
-  public void updateSeats(Integer num) {
-    this.seats = num;
-  }
 }

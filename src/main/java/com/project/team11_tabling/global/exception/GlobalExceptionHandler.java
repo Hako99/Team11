@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler({NotFoundException.class, UserNotMatchException.class})
-  public ResponseEntity<ErrorResponse> notFoundException(NotFoundException e) {
+  public ResponseEntity<ErrorResponse> notFoundException(Exception e) {
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
         .body(new ErrorResponse(e.getMessage()));
