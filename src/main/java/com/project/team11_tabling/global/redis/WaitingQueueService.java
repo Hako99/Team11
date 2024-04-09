@@ -12,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class WaitingQueueService {
   private final ApplicationEventPublisher eventPublisher;
   private static final String WAITING_QUEUE_SUFFIX = "-shop";
 
-  @TransactionalEventListener
+  @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
   public void addWaitingQueue(WaitingEvent waitingEvent) {
     Long shopId = waitingEvent.getShopId();
     Long userId = waitingEvent.getUserId();
