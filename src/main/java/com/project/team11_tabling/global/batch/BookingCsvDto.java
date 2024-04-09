@@ -1,6 +1,5 @@
 package com.project.team11_tabling.global.batch;
 
-import com.project.team11_tabling.domain.booking.entity.Booking;
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingCsvDto extends Booking{
+public class BookingCsvDto {
 
   private Long userId;
   private Long shopId;
