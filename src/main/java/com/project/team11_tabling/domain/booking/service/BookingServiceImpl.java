@@ -10,7 +10,6 @@ import com.project.team11_tabling.domain.shop.ShopRepository;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
 import com.project.team11_tabling.global.event.AlarmEvent;
-import com.project.team11_tabling.global.event.CallingEvent;
 import com.project.team11_tabling.global.event.CancelEvent;
 import com.project.team11_tabling.global.event.DoneEvent;
 import com.project.team11_tabling.global.event.WaitingEvent;
@@ -87,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
   public List<BookingResponse> getMyBookings(UserDetailsImpl userDetails) {
 
     List<Booking> myBookings = bookingRepository.findByUserId(userDetails.getUserId());
-    eventPublisher.publishEvent(new CallingEvent());
+
     return myBookings.stream()
         .map(BookingResponse::new)
         .toList();
