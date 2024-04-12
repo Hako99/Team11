@@ -32,7 +32,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     return jpaQueryFactory
         .select(review)
         .from(review)
-        .where(review.userId.eq(shopId))
+        .where(review.shopId.eq(shopId))
         .orderBy(review.createdAt.asc())
         .fetch();
   }
