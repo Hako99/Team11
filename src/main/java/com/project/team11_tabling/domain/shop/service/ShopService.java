@@ -8,7 +8,8 @@ public interface ShopService {
 
   KakaoResponseDTO getAPI(String search);
 
-  ShopResponseDto registerShop(ShopRequestDto requestDto);
+  Long registerShop(ShopRequestDto requestDto);
 
 
+  ShopResponseDto getShopInfo(Long shopId);
 }

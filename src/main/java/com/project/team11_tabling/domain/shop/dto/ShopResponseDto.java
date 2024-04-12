@@ -18,6 +18,7 @@ public class ShopResponseDto {
   private String phone;
   private LocalTime openTime;
   private LocalTime closeTime;
+  private Long waitingNum;
 
   public ShopResponseDto(Shop shop) {
     this.shopId = shop.getShopId();
@@ -27,6 +28,10 @@ public class ShopResponseDto {
     this.phone = shop.getPhone();
     this.openTime = shop.getOpenTime();
     this.closeTime = shop.getCloseTime();
+  }
+
+  public void updateWaitingNum(Long num){
+    this.waitingNum = num;
   }
 
 }
