@@ -1,0 +1,6 @@
+.search-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fffbe6; /* 연한 노란색 배경 */
+}

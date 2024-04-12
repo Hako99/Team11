@@ -1,9 +1,14 @@
-package com.project.team11_tabling.domain.shop;
+package com.project.team11_tabling.domain.shop.service;
 
+import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
+import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
+import com.project.team11_tabling.domain.shop.entity.Shop;
 import com.project.team11_tabling.domain.shop.entity.ShopSeats;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoAPI;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
+import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
+import com.project.team11_tabling.domain.shop.service.ShopService;
 import java.time.LocalTime;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;

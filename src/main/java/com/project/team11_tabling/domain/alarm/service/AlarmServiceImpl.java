@@ -8,6 +8,7 @@ import com.project.team11_tabling.global.event.AlarmEvent;
 import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "AlarmServiceImpl")
 @Transactional
 public class AlarmServiceImpl implements AlarmService {
 
@@ -40,6 +42,9 @@ public class AlarmServiceImpl implements AlarmService {
     Long userId = alarmEvent.getBooking().getUserId();
     BookingType bookingType = alarmEvent.getBooking().getState();
 
+    log.info("sendMessage:: shopId = {}, userId = {}, messageType = {}",
+        alarmEvent.getBooking().getShopId(), userId, bookingType);
+
     User user = findUser(userId);
     SseEmitter emitter = alarmSseEmitterRepository.get(user.getUserId());
     String message = messageByBookingType(bookingType);
@@ -60,7 +65,7 @@ public class AlarmServiceImpl implements AlarmService {
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-        emitter.complete();
+      emitter.complete();
     }
   }
 
