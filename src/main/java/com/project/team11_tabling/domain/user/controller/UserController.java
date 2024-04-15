@@ -1,6 +1,7 @@
 package com.project.team11_tabling.domain.user.controller;
 
 import com.project.team11_tabling.domain.user.dto.LoginRequestDto;
+import com.project.team11_tabling.domain.user.dto.LoginResponseDto;
 import com.project.team11_tabling.domain.user.dto.ResponseDto;
 import com.project.team11_tabling.domain.user.dto.SignupRequestDto;
 import com.project.team11_tabling.domain.user.service.UserService;
@@ -48,9 +49,9 @@ public class UserController {
   public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto request,
       HttpServletResponse response) {
 
-    userService.login(request, response);
+    LoginResponseDto responseDto = userService.login(request, response);
 
-    return ResponseEntity.ok().body(ResponseDto.success(200));
+    return ResponseEntity.ok().body(ResponseDto.success(200, responseDto));
   }
 }
 
