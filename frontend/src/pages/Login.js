@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { Form, Input, Inputs, Title, Wrapper } from '../components/Common';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { LoginApi } from '../api/LoginApi';
+import { useNavigate } from 'react-router-dom';
+import { useAuth  } from '../AuthProvider';
 
 const Login = () => {
   const [username, setId] = useState('');
   const [password, setPW] = useState('');
+  const { login } = useAuth();
+
+  const navigate = useNavigate(); // 네비게이션 함수 초기화
 
   const onChangeId = (e) => {
     setId(e.target.value);
@@ -16,11 +21,19 @@ const Login = () => {
   }
 
   const onClick = async () => {
-    const result = await LoginApi(username, password);
-    const {token} = result;
-    localStorage.setItem('Authorization', token);
-    alert('새로고침 해주세요')
-  }
+    try {
+      const { token } = await LoginApi(username, password);
+      if (token) {
+        localStorage.setItem('Authorization', token);
+        login(token);
+        window.location.reload();
+        navigate('/search');  // 성공 시, 바로 이동
+      }
+    } catch (error) {
+      console.error("Login failed with error", error);
+    }
+  };
+
 
   return (
       <Wrapper>

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './css/Signup.css';
 
 function Signup() {
+  const navigate = useNavigate(); // 네비게이션 함수 초기화
   // 상태 관리
   const [formData, setFormData] = useState({
     username: '',
@@ -9,6 +11,7 @@ function Signup() {
     password: '',
     phoneNumber: '',
   });
+
   const [errors, setErrors] = useState({});
   const [responseMessage, setResponseMessage] = useState('');
 
@@ -75,7 +78,9 @@ function Signup() {
     // API 호출
     try {
       const response = await fetch('http://localhost:8080/api/users/signup', requestOptions);
-      const data = await response.json();
+      const responseData =await response.json();
+      console.log(responseData);
+
 
       if (response.ok) {
         // 회원가입 성공 시 메시지 표시
@@ -88,10 +93,11 @@ function Signup() {
           password: '',
           phoneNumber: '',
         });
+        navigate('/'); // 로그인 페이지로 리디렉트
       } else {
         // API 응답에서 받은 에러 메시지 설정
-        setErrors(data.errors);
-        setResponseMessage('');
+        setResponseMessage(responseData.message);
+        setErrors({});
       }
     } catch (error) {
       // 에러 발생 시 에러 메시지 표시
@@ -133,7 +139,7 @@ function Signup() {
           </div>
 
           {/* 비밀번호 입력 */}
-          <div class="form-group">
+          <div className="form-group">
             <label htmlFor="password">password:</label>
             <input
                 id="password"
