@@ -43,13 +43,8 @@ jobs:
           echo "${{ secrets.PROPERTIES }}" > ./application.properties
         shell: bash
 
-      - name:  build.gradle 파일 만들기
-        run: |
-          cd /
-          touch ./build.gradle
-          chmod +rwx ./build.gradle
-          echo "${{ secrets.GRADLE }}" > ./build.gradle
-        shell: bash
+      - name: Gradle 파일 생성
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
 
 
