@@ -6,7 +6,7 @@ on:
 #------------------------------------------------
 env:
   PROJECT_NAME: team11-tabling
-  BUCKET_NAME: team11-tabling-bucket
+  BUCKET_NAME: team11-tabling-bucket2
   CODE_DEPLOY_APP_NAME: team11-tabling-code-deploy
   DEPLOYMENT_GROUP_NAME: team11-tabling-code-deploy-group
 #------------------------------------------------
