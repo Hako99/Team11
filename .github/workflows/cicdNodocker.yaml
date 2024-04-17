@@ -47,6 +47,7 @@ jobs:
         run: |
           cd /
           touch ./build.gradle
+          chmod +rwx ./build.gradle
           echo "${{ secrets.GRADLE }}" > ./build.gradle
         shell: bash
 
