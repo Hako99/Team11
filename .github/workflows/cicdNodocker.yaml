@@ -46,6 +46,7 @@ jobs:
       - name:  build.gradle 파일 만들기
         run: |
           cd /
+          chmod +x ./build.gradle
           touch ./build.gradle
           echo "${{ secrets.GRADLE }}" > ./build.gradle
         shell: bash
