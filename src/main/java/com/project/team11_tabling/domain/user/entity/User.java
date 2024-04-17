@@ -18,7 +18,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long UserId;
+  private Long userId;
 
   @Column(nullable = false)
   private String email;
@@ -32,12 +32,18 @@ public class User {
   private boolean active = true;
   @Column(nullable = false)
   private String userInfo = "자기소개 해주세요";
+  @Column(nullable = false)
+  private String grade = "Bronze";
 
   public User(String email, String username, String password, String phoneNumber) {
     this.email = email;
     this.username = username;
     this.password = password;
     this.phoneNumber = phoneNumber;
+  }
+
+  public void updateGrade(String grade) {
+    this.grade = grade;
   }
 
   public void inActiveUser() {
