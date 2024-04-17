@@ -49,7 +49,7 @@ public class ReviewController {
   }
 
   // 리뷰 조회 단일
-  @GetMapping("/{reviewId}")
+  @GetMapping("/review/{reviewId}")
   public ResponseEntity<CommonResponse<GetReviewResponseDto>> getReview(
       @PathVariable Long reviewId) {
     return CommonResponse.ok(reviewService.getReview(reviewId));
@@ -63,7 +63,7 @@ public class ReviewController {
   }
 
   // 상점의 리뷰 조회 전체
-  @GetMapping("/{shopId}")
+  @GetMapping("/shop/{shopId}")
   public ResponseEntity<CommonResponse<List<GetReviewResponseDto>>> getReviews(
       @PathVariable Long shopId) {
     return CommonResponse.ok(reviewService.getShopReviews(shopId));
