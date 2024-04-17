@@ -1,6 +1,42 @@
-.search-container {
+.shop-info {
   max-width: 600px;
   margin: auto;
   padding: 20px;
+  background-color: #fffbe6; /* 연한 노란색 배경 */
+}
+
+.booking {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fffbe6; /* 연한 노란색 배경 */
+
+}
+
+.party {
+  padding: 8px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none; /* 포커스 시 테두리 제거 */
+  margin-left: 10px;
+}
+
+.btn {
+  margin-left: 10px;
+}
+
+.reviews {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fffbe6; /* 연한 노란색 배경 */
+}
+
+.reviews > table {
+  margin: auto;
+  text-align: center;
+  width: 600px;
+  border: 1px solid;
   background-color: #fffbe6; /* 연한 노란색 배경 */
 }
