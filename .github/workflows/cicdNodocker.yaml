@@ -36,12 +36,12 @@ jobs:
           distribution: 'temurin'
 
 
-      - name:  application.properties 파일 만들기
-        run: |
-          cd ./src/main/resources
-          touch ./application.properties
-          echo "${{ secrets.PROPERTIES }}" > ./application.properties
-        shell: bash
+#      - name:  application.properties 파일 만들기
+#        run: |
+#          cd ./src/main/resources
+#          touch ./application.properties
+#          echo "${{ secrets.PROPERTIES }}" > ./application.properties
+#        shell: bash
 
       - name: Gradle 파일 생성
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
