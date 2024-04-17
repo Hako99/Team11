@@ -1,6 +1,7 @@
 package com.project.team11_tabling.domain.user.service;
 
 import com.project.team11_tabling.domain.user.dto.LoginRequestDto;
+import com.project.team11_tabling.domain.user.dto.LoginResponseDto;
 import com.project.team11_tabling.domain.user.dto.SignupRequestDto;
 import com.project.team11_tabling.domain.user.entity.User;
 import com.project.team11_tabling.domain.user.repository.UserRepository;
@@ -38,7 +39,7 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public void login(LoginRequestDto request, HttpServletResponse res) {
+  public LoginResponseDto login(LoginRequestDto request, HttpServletResponse res) {
     String username = request.getUsername();
     String password = request.getPassword();
 
@@ -54,6 +55,8 @@ public class UserService {
     // JWT 생성 및 헤더에 저장 후 Response 객체에 추가
     String token = jwtUtil.createToken(user.getUsername());
     jwtUtil.addJwtToHeader(token, res);
+
+    return new LoginResponseDto(token);
   }
 
   @Transactional
