@@ -34,7 +34,7 @@ public class ShopServiceImpl implements ShopService {
   }
 
   public Long registerShop(ShopRequestDto requestDto) {
-    Optional<Shop> exist = shopRepository.findById(requestDto.getId());
+    Optional<Shop> exist = shopRepository.findByShopId(requestDto.getId());
     if(exist.isPresent()){
       return exist.get().getId();
     }
