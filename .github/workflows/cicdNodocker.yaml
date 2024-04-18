@@ -1,13 +1,9 @@
 name: Plug project CICD
 
 on:
-  push:
-    branches: [ "feat/cicd" ]
-
-#on:
-#  pull_request:
-#    types: [ closed ]
-#    branches: [ dev ]
+  pull_request:
+    types: [ closed ]
+    branches: [ dev ]
 #------------------------------------------------
 env:
   PROJECT_NAME: team11-tabling
