@@ -25,6 +25,11 @@ public class UserController {
 
   private final UserService userService;
 
+  @PostMapping("/test")
+  public String test(){
+    return "testOk";
+  }
+
   @PostMapping("/signup")
   public ResponseEntity<ResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto,
       BindingResult bindingResult) {
