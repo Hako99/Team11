@@ -1,4 +1,4 @@
-name: Plug project CICD1
+name: Plug project CICD
 
 on:
   push:
