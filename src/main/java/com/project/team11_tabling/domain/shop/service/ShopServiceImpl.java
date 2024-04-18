@@ -11,6 +11,7 @@ import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
 import com.project.team11_tabling.domain.shop.service.ShopService;
 import com.project.team11_tabling.global.redis.WaitingQueueService;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,6 +34,10 @@ public class ShopServiceImpl implements ShopService {
   }
 
   public Long registerShop(ShopRequestDto requestDto) {
+    Optional<Shop> exist = shopRepository.findById(requestDto.getId());
+    if(exist.isPresent()){
+      return exist.get().getId();
+    }
     Shop shop = new Shop(requestDto);
     shop.updateTime(randomTime());
 
