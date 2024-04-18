@@ -26,8 +26,8 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/test")
-  public String test(){
-    return "testOk";
+  public ResponseEntity<ResponseDto> test(){
+    return ResponseEntity.ok().body(ResponseDto.success(200));
   }
 
   @PostMapping("/signup")
