@@ -4,17 +4,17 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/tabling
+    destination: /home/ubuntu/aws-study
 
 # 권한을 정의합니다.
 permissions:
-  - object: /home/ec2-user/tabling/
-    owner: ec2-user
-    group: ec2-user
+  - object: /home/ubuntu/aws-study/
+    owner: ubuntu
+    group: ubuntu
 
 # 배포단계에서 진행하는 훅 스크립트를 정의합니다.
 hooks:
   AfterInstall:
     - location: deploy.sh
       timeout: 60
-      runas: ec2-user
+      runas: ubuntu

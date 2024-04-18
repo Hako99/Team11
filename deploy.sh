@@ -1,4 +1,6 @@
-REPOSITORY=/home/ec2-user/tabling
+#!/usr/bin/env bash
+
+REPOSITORY=/home/ubuntu/tabling
 cd $REPOSITORY
 
 APP_NAME=tabling
