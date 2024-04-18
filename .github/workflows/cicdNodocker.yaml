@@ -1,6 +1,11 @@
 name: Plug project CICD
 
 on:
+  pull_request:
+    types: [ opened, synchronize, closed ]
+    branches: [ dev ]
+
+on:
   push:
     branches: [ "feat/cicd" ]
 #------------------------------------------------
