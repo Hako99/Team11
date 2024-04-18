@@ -1,6 +1,5 @@
 package com.project.team11_tabling.domain.booking.service;
 
-import com.project.team11_tabling.domain.alarm.service.AlarmService;
 import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.domain.booking.entity.Booking;
@@ -35,7 +34,6 @@ public class BookingServiceImpl implements BookingService {
   private final BookingRepository bookingRepository;
   private final ShopRepository shopRepository;
   private final ShopSeatsRepository shopSeatsRepository;
-  private final AlarmService alarmService;
   private final ApplicationEventPublisher eventPublisher;
 
   @Override
@@ -63,8 +61,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     bookingRepository.save(booking);
-    eventPublisher.publishEvent(new AlarmEvent(booking));
-
     return new BookingResponse(booking);
   }
 
