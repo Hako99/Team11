@@ -13,7 +13,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
     ThreadPoolTaskScheduler threadPool = new ThreadPoolTaskScheduler();
 
     // Thread 개수 설정
-    threadPool.setPoolSize(3);
+    threadPool.setPoolSize(4);
     threadPool.initialize();
 
     taskRegistrar.setTaskScheduler(threadPool);
