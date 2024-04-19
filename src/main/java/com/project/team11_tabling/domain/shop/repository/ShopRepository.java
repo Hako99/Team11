@@ -8,4 +8,5 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
   @Override
   Optional<Shop> findById(Long aLong);
+  Optional<Shop> findByShopId(Long shopId);
 }
