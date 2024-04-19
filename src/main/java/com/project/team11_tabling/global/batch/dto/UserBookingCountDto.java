@@ -13,5 +13,5 @@ import lombok.ToString;
 @AllArgsConstructor
 public class UserBookingCountDto {
   private Long userId;
-  private int bookingCount;
+  private int userBookingCount;
 }
