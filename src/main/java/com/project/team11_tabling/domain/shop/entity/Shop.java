@@ -41,6 +41,9 @@ public class Shop {
   private Integer reviewCount;
 
   @Column(nullable = false)
+  private boolean popularShop = false;
+
+  @Column(nullable = false)
   private LocalTime openTime;
 
   @Column(nullable = false)
@@ -60,4 +63,7 @@ public class Shop {
     this.closeTime = time[1];
   }
 
+  public void popularShopUpdate(boolean popularShop) {
+    this.popularShop = popularShop;
+  }
 }
