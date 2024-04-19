@@ -1,4 +1,4 @@
-package com.project.team11_tabling.global.batch;
+package com.project.team11_tabling.global.batch.dto;
 
 import com.project.team11_tabling.domain.booking.entity.BookingType;
 import java.time.LocalDateTime;

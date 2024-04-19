@@ -1,6 +1,8 @@
 package com.project.team11_tabling.global.batch;
 
 import com.project.team11_tabling.domain.booking.entity.Booking;
+import com.project.team11_tabling.global.batch.dto.BookingCsvDto;
+import com.project.team11_tabling.global.batch.tasklet.DeleteBookingTasklet;
 import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -28,23 +30,32 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class BookingBatch {
 
   private final EntityManagerFactory entityManagerFactory;
+  private final DeleteBookingTasklet deleteBookingTasklet;
 
-  private final int chunkSize = 10;
+  private final int chunkSize = 100;
 
   @Bean
-  public Job job(JobRepository jobRepository,PlatformTransactionManager transactionManager) {
+  public Job bookingJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) {
     return new JobBuilder("bookingJob", jobRepository)
-        .start(step(jobRepository, transactionManager))
+        .start(bookingStep(jobRepository, transactionManager))
+        .next(deleteBookingStep(jobRepository,transactionManager))
         .build();
   }
 
   @Bean
-  public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+  public Step bookingStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
     return new StepBuilder("bookingStep", jobRepository)
         .<Booking, BookingCsvDto>chunk(chunkSize, transactionManager)
         .reader(bookingItemReader())
         .processor(bookingItemProcessor())
         .writer(bookingItemWriter())
+        .build();
+  }
+
+  @Bean
+  public Step deleteBookingStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    return new StepBuilder("deleteBookingStep", jobRepository)
+        .tasklet(deleteBookingTasklet, transactionManager)
         .build();
   }
 
