@@ -15,4 +15,5 @@ public interface BookingService {
 
   BookingResponse noShow(Long bookingId, UserDetailsImpl userDetails);
 
+  BookingResponse getShopBooking(Long shopId, UserDetailsImpl userDetails);
 }

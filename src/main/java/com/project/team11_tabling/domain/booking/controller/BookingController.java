@@ -69,4 +69,15 @@ public class BookingController {
     return CommonResponse.ok(response);
   }
 
+  @GetMapping("/shop/{shopId}")
+  public ResponseEntity<CommonResponse<BookingResponse>> getShopBooking(
+      @PathVariable Long shopId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+
+    BookingResponse response = bookingService.getShopBooking(shopId, userDetails);
+
+    return CommonResponse.ok(response);
+  }
+
 }

@@ -99,6 +99,17 @@ public class BookingServiceImpl implements BookingService {
     return new BookingResponse(bookingRepository.saveAndFlush(booking));
   }
 
+  @Override
+  public BookingResponse getShopBooking(Long shopId, UserDetailsImpl userDetails) {
+    shopRepository.findById(shopId)
+        .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
+
+    Booking booking = bookingRepository.findByShopIdAndUserId(shopId,
+        userDetails.getUserId()).orElse(new Booking());
+
+    return new BookingResponse(booking);
+  }
+
   @Async
   @EventListener
   public void doneBooking(DoneEvent doneEvent) {
