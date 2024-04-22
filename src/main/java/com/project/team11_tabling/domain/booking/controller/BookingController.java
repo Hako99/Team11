@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,11 +27,14 @@ public class BookingController {
   private final BookingService bookingService;
 
   @PostMapping
-  public SseEmitter booking(
+  public ResponseEntity<CommonResponse<BookingResponse>> booking(
       @RequestBody @Valid BookingRequest request,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return bookingService.booking(request, userDetails);
+
+    BookingResponse response = bookingService.booking(request, userDetails);
+
+    return CommonResponse.ok(response);
   }
 
   @DeleteMapping("/{bookingId}")
@@ -63,6 +65,17 @@ public class BookingController {
   ) {
 
     BookingResponse response = bookingService.noShow(bookingId, userDetails);
+
+    return CommonResponse.ok(response);
+  }
+
+  @GetMapping("/shop/{shopId}")
+  public ResponseEntity<CommonResponse<BookingResponse>> getShopBooking(
+      @PathVariable Long shopId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+
+    BookingResponse response = bookingService.getShopBooking(shopId, userDetails);
 
     return CommonResponse.ok(response);
   }

@@ -44,6 +44,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/users/signup").permitAll()
             .requestMatchers("/api/users/login").permitAll()// '/api/user/'로 시작하는 요청 모두 접근 허가
             .requestMatchers("/health-check").permitAll()
+            .requestMatchers("/api/alarm/**").permitAll()
             .anyRequest().authenticated() // 그 외 모든 요청 인증처리
     );
 

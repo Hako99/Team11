@@ -37,7 +37,7 @@ public class ShopController {
 
   }
 
-  @PostMapping
+  @PostMapping(consumes = "application/json")
   public Long registerShop(
       @RequestBody ShopRequestDto requestDto) {
     return shopService.registerShop(requestDto);
