@@ -20,10 +20,12 @@ public class WebSecurityConfig {
 
   private final JwtUtil jwtUtil;
   private final UserDetailsServiceImpl userDetailsService;
+
   @Bean
   public JwtAuthorizationFilter jwtAuthorizationFilter() {
     return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
   }
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     // CSRF 설정
@@ -35,12 +37,13 @@ public class WebSecurityConfig {
     );
 
     http.authorizeHttpRequests((authorizeHttpRequests) ->
-            authorizeHttpRequests
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .permitAll() // resources 접근 허용 설정
-                .requestMatchers("/api/shops").permitAll()
+        authorizeHttpRequests
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+            .permitAll() // resources 접근 허용 설정
+            .requestMatchers("/api/shops").permitAll()
             .requestMatchers("/api/users/signup").permitAll()
             .requestMatchers("/api/users/login").permitAll()// '/api/user/'로 시작하는 요청 모두 접근 허가
+            .requestMatchers("/health-check").permitAll()
             .anyRequest().authenticated() // 그 외 모든 요청 인증처리
     );
 
