@@ -49,7 +49,8 @@ public class WaitingQueueService {
           })
           .map(key -> {
             String userId = redisTemplate.opsForList().leftPop(key);
-            return new DoneEvent(Long.parseLong(key.substring(0, 1)), Long.parseLong(userId));
+            String[] shopKey = key.split("-");
+            return new DoneEvent(Long.parseLong(shopKey[0]), Long.parseLong(userId));
           })
           .forEach(eventPublisher::publishEvent);
     }
