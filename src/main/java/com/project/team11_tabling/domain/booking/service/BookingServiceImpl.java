@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,7 +109,6 @@ public class BookingServiceImpl implements BookingService {
     return new BookingResponse(booking);
   }
 
-  @Async
   @EventListener
   public void doneBooking(DoneEvent doneEvent) {
     log.info("doneBookingEvent:: shopId = {}, userId = {}",
