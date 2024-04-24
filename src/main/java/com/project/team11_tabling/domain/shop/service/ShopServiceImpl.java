@@ -42,7 +42,7 @@ public class ShopServiceImpl implements ShopService {
     shop.updateTime(randomTime());
 
     Shop saveShop = shopRepository.save(shop);
-    shopSeatsRepository.save(ShopSeats.of(saveShop.getId(), randomSeat()));
+    shopSeatsRepository.save(ShopSeats.of(saveShop.getId(),0));
 
     return saveShop.getId(); //shop의 id 리턴
   }
