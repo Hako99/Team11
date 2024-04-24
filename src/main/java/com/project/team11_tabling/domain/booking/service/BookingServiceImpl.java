@@ -40,7 +40,7 @@ public class BookingServiceImpl implements BookingService {
     shopRepository.findById(request.getShopId())
         .orElseThrow(() -> new NotFoundException("식당 정보가 없습니다."));
 
-    bookingRepository.findByShopIdAndUserId(request.getShopId(), userDetails.getUserId())
+    bookingRepository.findBookingByUserId(userDetails.getUserId())
         .ifPresent(booking -> {
           throw new IllegalArgumentException("이미 줄서기를 하고 있습니다.");
         });
