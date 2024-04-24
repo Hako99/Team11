@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -35,7 +34,6 @@ public class WaitingQueueService {
   }
 
   @EventListener
-  @Async
   public void popWaitingQueue(CallingEvent callingDto) {
     log.info("popWaitingQueue");
 
@@ -49,7 +47,8 @@ public class WaitingQueueService {
           })
           .map(key -> {
             String userId = redisTemplate.opsForList().leftPop(key);
-            return new DoneEvent(Long.parseLong(key.substring(0, 1)), Long.parseLong(userId));
+            String[] shopKey = key.split("-");
+            return new DoneEvent(Long.parseLong(shopKey[0]), Long.parseLong(userId));
           })
           .forEach(eventPublisher::publishEvent);
     }
