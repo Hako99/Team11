@@ -9,4 +9,6 @@ public interface BookingRepositoryQuery {
 
   Optional<Booking> findByShopIdAndUserId(Long shopId, Long userId);
 
+  Optional<Booking> findBookingByUserId(Long userId);
+
 }

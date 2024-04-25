@@ -54,6 +54,23 @@ public class BookingRepositoryQueryImpl implements BookingRepositoryQuery {
     return findBooking == null ? Optional.empty() : Optional.of(findBooking);
   }
 
+  @Override
+  public Optional<Booking> findBookingByUserId(Long userId) {
+    StringTemplate dateStringTemplate = getDateStringTemplate();
+
+    Booking findBooking =
+        factory.select(booking)
+            .from(booking)
+            .where(
+                booking.state.eq(BookingType.WAITING)
+                    .and(booking.userId.eq(userId))
+                    .and(dateStringTemplate.eq(String.valueOf(LocalDate.now())))
+            )
+            .fetchFirst();
+
+    return findBooking == null ? Optional.empty() : Optional.of(findBooking);
+  }
+
   private static StringTemplate getDateStringTemplate() {
     return Expressions.stringTemplate(
         "DATE_FORMAT({0}, {1})",
