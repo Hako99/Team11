@@ -7,9 +7,8 @@ import com.project.team11_tabling.domain.user.entity.User;
 import com.project.team11_tabling.domain.user.repository.UserRepository;
 import com.project.team11_tabling.global.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
   private final JwtUtil jwtUtil;
 
   @Transactional
   public void signup(SignupRequestDto request) {
     String username = request.getUsername();
     String email = request.getEmail();
-    String password = request.getPassword();
+    String password = passwordEncoder.encode(request.getPassword());
     String phoneNumber = request.getPhoneNumber();
 
     if (userRepository.findByUsername(username).isPresent()) {
@@ -48,8 +48,9 @@ public class UserService {
         () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
     );
 
-    if (!user.isActive()) {
-      throw new IllegalArgumentException("비활성화된 유저입니다.");
+    // 비밀번호 확인
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 
     // JWT 생성 및 헤더에 저장 후 Response 객체에 추가
@@ -57,17 +58,5 @@ public class UserService {
     jwtUtil.addJwtToHeader(token, res);
 
     return new LoginResponseDto(token);
-  }
-
-  @Transactional
-  public void inActiveUser(User user) {
-    User findUser = userRepository.findById(user.getUserId()).orElseThrow(
-        () -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-    findUser.inActiveUser();
-  }
-
-  public List<User> findAllByEmailIn(List<String> emailList) {
-    return userRepository.findAllByEmailIn(emailList);
   }
 }
