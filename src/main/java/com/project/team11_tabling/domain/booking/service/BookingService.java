@@ -4,11 +4,10 @@ import com.project.team11_tabling.domain.booking.dto.BookingRequest;
 import com.project.team11_tabling.domain.booking.dto.BookingResponse;
 import com.project.team11_tabling.global.jwt.security.UserDetailsImpl;
 import java.util.List;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface BookingService {
 
-  SseEmitter booking(BookingRequest request, UserDetailsImpl userDetails);
+  BookingResponse booking(BookingRequest request, UserDetailsImpl userDetails);
 
   BookingResponse cancelBooking(Long bookingId, UserDetailsImpl userDetails);
 
@@ -16,4 +15,5 @@ public interface BookingService {
 
   BookingResponse noShow(Long bookingId, UserDetailsImpl userDetails);
 
+  BookingResponse getShopBooking(Long shopId, UserDetailsImpl userDetails);
 }

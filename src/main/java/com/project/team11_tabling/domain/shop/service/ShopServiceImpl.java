@@ -8,7 +8,6 @@ import com.project.team11_tabling.domain.shop.externalAPI.KakaoAPI;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
 import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
-import com.project.team11_tabling.domain.shop.service.ShopService;
 import com.project.team11_tabling.global.redis.WaitingQueueService;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -42,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
     shop.updateTime(randomTime());
 
     Shop saveShop = shopRepository.save(shop);
-    shopSeatsRepository.save(ShopSeats.of(saveShop.getId(), randomSeat()));
+    shopSeatsRepository.save(ShopSeats.of(saveShop.getId(),0));
 
     return saveShop.getId(); //shop의 id 리턴
   }

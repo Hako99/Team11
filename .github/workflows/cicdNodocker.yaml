@@ -3,7 +3,7 @@ name: Plug project CICD
 on:
   pull_request:
     types: [ closed ]
-    branches: [ dev ]
+    branches: [ "master" ]
 #------------------------------------------------
 env:
   PROJECT_NAME: team11-tabling
