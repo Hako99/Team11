@@ -6,6 +6,7 @@ import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
 import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
 import com.project.team11_tabling.global.response.CommonResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/shops")
 public class ShopController {
+
   private final ShopService shopService;
 
   @CrossOrigin(origins = "http://localhost:3000")
@@ -55,6 +57,12 @@ public class ShopController {
 
   }
 
+  @GetMapping("/popular")
+  public ResponseEntity<CommonResponse<List<ShopResponseDto>>> getPopularShop() {
 
+    List<ShopResponseDto> responses = shopService.getPopularShop();
+
+    return CommonResponse.ok(responses);
+  }
 
 }
