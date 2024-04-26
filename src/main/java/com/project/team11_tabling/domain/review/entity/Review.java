@@ -25,26 +25,19 @@ public class Review extends Timestamp {
   private Long id;
   @Column(name = "shop_id", nullable = false)
   private Long shopId;
-  @Column(name = "booking_id", nullable = false)
-  private Long bookingId;
   @Column(name = "user_id", nullable = false)
   private Long userId;
   @Column(name = "description", nullable = false)
   private String description;
-  @Column(name = "star", nullable = false)
-  private Long star;
 
 
   public Review(ReviewCreateRequestDto reviewCreateRequestDto, Long userId) {
     this.shopId = reviewCreateRequestDto.getShopId();
-    this.bookingId = reviewCreateRequestDto.getBookingId();
     this.description = reviewCreateRequestDto.getDescription();
-    this.star = reviewCreateRequestDto.getStar();
     this.userId = userId;
   }
 
   public void updateReview(ReviewUpdateRequestDto reviewUpdateRequestDto) {
     this.description = reviewUpdateRequestDto.getDescription();
-    this.star = reviewUpdateRequestDto.getStar();
   }
 }

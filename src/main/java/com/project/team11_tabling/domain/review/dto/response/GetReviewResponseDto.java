@@ -18,9 +18,7 @@ public class GetReviewResponseDto {
 
   private Long userId;
   private Long shopId;
-  private Long bookingId;
   private String description;
-  private Long star;
 
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -34,9 +32,7 @@ public class GetReviewResponseDto {
   public GetReviewResponseDto(Review review) {
     this.userId = review.getUserId();
     this.shopId = review.getShopId();
-    this.bookingId = review.getBookingId();
     this.description = review.getDescription();
-    this.star = review.getStar();
     this.createdAt = review.getCreatedAt();
     this.updatedAt = review.getUpdatedAt();
   }

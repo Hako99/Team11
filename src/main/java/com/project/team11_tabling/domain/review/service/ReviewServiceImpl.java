@@ -10,15 +10,20 @@ import com.project.team11_tabling.domain.review.dto.response.GetReviewResponseDt
 import com.project.team11_tabling.domain.review.entity.Review;
 import com.project.team11_tabling.domain.review.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ReviewServiceImpl implements ReviewService {
 
   private final ReviewRepository reviewRepository;
@@ -27,15 +32,16 @@ public class ReviewServiceImpl implements ReviewService {
   // 리뷰 생성
   @Override
   public void createReview(Long userId, ReviewCreateRequestDto reviewCreateRequestDto) {
-    Booking booking = findBooking(reviewCreateRequestDto.getBookingId());
-    if (booking.getUserId() != userId) {
+    Optional<Set<Booking>> booking = bookingRepository.findByUserIdAndShopIdAndState(
+        userId, reviewCreateRequestDto.getShopId(), DONE);
+    log.info(String.valueOf(booking.get().size()));
+    if(!booking.get().isEmpty()) {
+      Review review = new Review(reviewCreateRequestDto, userId);
+      reviewRepository.save(review);
+    }
+    else{
       throw new IllegalArgumentException("본인이 이용한 내역에만 리뷰를 남길 수 있습니다.");
     }
-    if (booking.getState() != DONE) {
-      throw new IllegalArgumentException("아직 진행중인 사항에는 리뷰를 남길 수 없습니다.");
-    }
-    Review review = new Review(reviewCreateRequestDto, userId);
-    reviewRepository.save(review);
   }
 
   private Booking findBooking(Long bookingId) {

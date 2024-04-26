@@ -7,8 +7,5 @@ import lombok.Getter;
 public class ReviewCreateRequestDto {
 
   private Long shopId;
-  private Long bookingId;
   private String description;
-  private Long star;
-
 }
