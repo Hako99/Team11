@@ -8,7 +8,6 @@ import com.project.team11_tabling.domain.shop.externalAPI.KakaoAPI;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
 import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
-import com.project.team11_tabling.domain.shop.service.ShopService;
 import com.project.team11_tabling.global.redis.WaitingQueueService;
 import java.time.LocalTime;
 import java.util.Optional;
