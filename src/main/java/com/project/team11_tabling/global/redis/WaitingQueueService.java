@@ -1,5 +1,6 @@
 package com.project.team11_tabling.global.redis;
 
+import com.project.team11_tabling.domain.shop.service.RealtimeWaitingDataService;
 import com.project.team11_tabling.global.event.CallingEvent;
 import com.project.team11_tabling.global.event.CancelEvent;
 import com.project.team11_tabling.global.event.DoneEvent;
@@ -21,6 +22,7 @@ public class WaitingQueueService {
 
   private final StringRedisTemplate redisTemplate;
   private final ApplicationEventPublisher eventPublisher;
+  private final RealtimeWaitingDataService realtimeWaitingDataService;
   private static final String WAITING_QUEUE_SUFFIX = "-shop";
 
   @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
@@ -31,6 +33,8 @@ public class WaitingQueueService {
     log.info("addWaitingQueue:: shopId = {}, userId = {}", shopId, userId);
 
     redisTemplate.opsForList().rightPush(shopId + WAITING_QUEUE_SUFFIX, String.valueOf(userId));
+
+    sendMessage(shopId, "wait"); // redis publisher
   }
 
   @EventListener
@@ -48,6 +52,7 @@ public class WaitingQueueService {
           .map(key -> {
             String userId = redisTemplate.opsForList().leftPop(key);
             String[] shopKey = key.split("-");
+            sendMessage(Long.valueOf(shopKey[0]), "ok");
             return new DoneEvent(Long.parseLong(shopKey[0]), Long.parseLong(userId));
           })
           .forEach(eventPublisher::publishEvent);
@@ -63,13 +68,20 @@ public class WaitingQueueService {
 
     redisTemplate.opsForList()
         .remove(shopId + WAITING_QUEUE_SUFFIX, 0, String.valueOf(userId));
+    sendMessage(shopId, "ok");
   }
 
   public Long getWaitingQueueSize(Long shopId) {
     Long size = redisTemplate.opsForList()
         .size(shopId + WAITING_QUEUE_SUFFIX);
-
     return size == null ? 0 : size;
   }
+
+  public void sendMessage(Long shopId, String status){
+    Long size = getWaitingQueueSize(shopId);
+    log.info("queue size : " + size);
+    realtimeWaitingDataService.sendUpdate(shopId, size, status);
+  }
+
 
 }

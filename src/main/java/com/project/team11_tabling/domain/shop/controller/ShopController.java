@@ -1,12 +1,14 @@
 package com.project.team11_tabling.domain.shop.controller;
 
 
+import com.project.team11_tabling.domain.shop.service.RealtimeWaitingDataService;
 import com.project.team11_tabling.domain.shop.service.ShopService;
 import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
 import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
 import com.project.team11_tabling.global.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j(topic = "shop")
 @RequestMapping("/api/shops")
 public class ShopController {
   private final ShopService shopService;
+  private final RealtimeWaitingDataService waitingQueueService;
 
   @CrossOrigin(origins = "http://localhost:3000")
   @GetMapping
@@ -55,6 +60,10 @@ public class ShopController {
 
   }
 
+  @GetMapping("/waiting-info/{shopId}")
+  public SseEmitter getWaitingCount(@PathVariable Long shopId) {
+    return waitingQueueService.addEmitter(String.valueOf(shopId));
+  }
 
 
 }
