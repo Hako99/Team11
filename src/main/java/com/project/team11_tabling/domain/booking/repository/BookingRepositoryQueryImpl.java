@@ -9,7 +9,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -69,6 +72,22 @@ public class BookingRepositoryQueryImpl implements BookingRepositoryQuery {
             .fetchFirst();
 
     return findBooking == null ? Optional.empty() : Optional.of(findBooking);
+  }
+
+  @Override
+  public Optional<Set<Booking>> findByUserIdAndShopIdAndState(Long userId, Long shopId,
+      BookingType DONE) {
+    List<Booking> findBooking =
+        factory.select(booking)
+            .from(booking)
+            .where(
+                booking.state.eq(BookingType.DONE)
+                    .and(booking.userId.eq(userId))
+                    .and(booking.shopId.eq(shopId))
+            )
+            .fetch();
+
+    return findBooking == null ? Optional.empty() : Optional.of(new HashSet<>(findBooking));
   }
 
   private static StringTemplate getDateStringTemplate() {
