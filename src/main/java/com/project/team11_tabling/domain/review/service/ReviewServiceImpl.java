@@ -10,7 +10,6 @@ import com.project.team11_tabling.domain.review.dto.response.GetReviewResponseDt
 import com.project.team11_tabling.domain.review.entity.Review;
 import com.project.team11_tabling.domain.review.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

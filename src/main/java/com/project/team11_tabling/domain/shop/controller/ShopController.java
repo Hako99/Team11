@@ -7,6 +7,7 @@ import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
 import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
 import com.project.team11_tabling.global.response.CommonResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Slf4j(topic = "shop")
 @RequestMapping("/api/shops")
 public class ShopController {
+
   private final ShopService shopService;
   private final RealtimeWaitingDataService waitingQueueService;
 
@@ -64,6 +66,12 @@ public class ShopController {
   public SseEmitter getWaitingCount(@PathVariable Long shopId) {
     return waitingQueueService.addEmitter(String.valueOf(shopId));
   }
+  @GetMapping("/popular")
+  public ResponseEntity<CommonResponse<List<ShopResponseDto>>> getPopularShop() {
 
+    List<ShopResponseDto> responses = shopService.getPopularShop();
+
+    return CommonResponse.ok(responses);
+  }
 
 }

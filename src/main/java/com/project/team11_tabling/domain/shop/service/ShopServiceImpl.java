@@ -10,6 +10,7 @@ import com.project.team11_tabling.domain.shop.repository.ShopRepository;
 import com.project.team11_tabling.domain.shop.repository.ShopSeatsRepository;
 import com.project.team11_tabling.global.redis.WaitingQueueService;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,16 @@ public class ShopServiceImpl implements ShopService {
     Shop shop = shopRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당가게 정보가 없습니다."));
     ShopResponseDto responseDto = new ShopResponseDto(shop);
     return responseDto;
+  }
+
+  @Override
+  public List<ShopResponseDto> getPopularShop() {
+    List<Shop> popularShops = shopRepository.findByPopularShopOrderByReviewCountDesc(true);
+
+    return popularShops.stream()
+        .map(ShopResponseDto::new)
+        .peek(shop -> shop.updateWaitingNum(waitingQueueService.getWaitingQueueSize(shop.getId())))
+        .toList();
   }
 
 }

@@ -25,7 +25,7 @@ public class AlarmServiceImpl implements AlarmService {
   private static final Long DEFAULT_TIMEOUT = 600L * 1000 * 60;
   private static final Long COMPLETE_TIMEOUT = 10L * 10000;
   private static final String WAITING_MESSAGE = " 손님의 줄서기가 시작되었습니다.";
-  private static final String DONE_MESSAGE = " 손님이 입장완료 되었습니다.";
+  private static final String DONE_MESSAGE = " 입장하여 주시기 바랍니다.";
   private static final String NOSHOW_MESSAGE = " 손님 입장 시간이 초과하여 입장 취소되었습니다.";
   private static final String CANCEL_MESSAGE = " 손님 줄서기를 취소하셨습니다.";
 

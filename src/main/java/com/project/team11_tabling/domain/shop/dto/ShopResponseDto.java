@@ -11,6 +11,7 @@ import lombok.Setter;
 
 public class ShopResponseDto {
 
+  private Long id;
   private Long shopId;
   private String placeName;
   private String city;
@@ -21,6 +22,7 @@ public class ShopResponseDto {
 
 
   public ShopResponseDto(Shop shop) {
+    this.id = shop.getId();
     this.shopId = shop.getShopId();
     this.placeName = shop.getName();
     this.city = shop.getCity();
