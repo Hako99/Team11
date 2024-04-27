@@ -1,9 +1,7 @@
 package com.project.team11_tabling.domain.booking.repository;
 
 import com.project.team11_tabling.domain.booking.entity.Booking;
-import com.project.team11_tabling.domain.booking.entity.BookingType;
 import java.util.Optional;
-import java.util.Set;
 
 public interface BookingRepositoryQuery {
 
