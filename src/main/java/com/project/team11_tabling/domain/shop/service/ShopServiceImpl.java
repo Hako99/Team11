@@ -14,11 +14,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "RedisListener")
 public class ShopServiceImpl implements ShopService {
 
   private static final String USER_CACHE = "userCache";
@@ -74,6 +76,8 @@ public class ShopServiceImpl implements ShopService {
   public ShopResponseDto getShopInfo(Long id) {
     Shop shop = shopRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당가게 정보가 없습니다."));
     ShopResponseDto responseDto = new ShopResponseDto(shop);
+    responseDto.updateWaitingNum(waitingQueueService.getWaitingQueueSize(id));
+    System.out.println(responseDto.getWaitingNum());
     return responseDto;
   }
 

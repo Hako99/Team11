@@ -1,11 +1,14 @@
 package com.project.team11_tabling.domain.shop.controller;
 
 
-import com.project.team11_tabling.domain.shop.service.RealtimeWaitingDataService;
+import com.project.team11_tabling.domain.shop.service.redisMessage.RealtimeWaitingDataService;
 import com.project.team11_tabling.domain.shop.service.ShopService;
 import com.project.team11_tabling.domain.shop.dto.ShopRequestDto;
 import com.project.team11_tabling.domain.shop.dto.ShopResponseDto;
 import com.project.team11_tabling.domain.shop.externalAPI.KakaoResponseDTO;
+import com.project.team11_tabling.domain.shop.service.redisMessage.RedisSubscriber;
+import com.project.team11_tabling.domain.shop.service.redisMessage.ShopTopicRepository;
+import com.project.team11_tabling.global.redis.WaitingQueueService;
 import com.project.team11_tabling.global.response.CommonResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class ShopController {
 
   private final ShopService shopService;
-  private final RealtimeWaitingDataService waitingQueueService;
+  private final RedisSubscriber redisSubscriber;
+  private final ShopTopicRepository shopTopicRepository;
 
   @CrossOrigin(origins = "http://localhost:3000")
   @GetMapping
@@ -64,8 +68,12 @@ public class ShopController {
 
   @GetMapping("/waiting-info/{shopId}")
   public SseEmitter getWaitingCount(@PathVariable Long shopId) {
-    return waitingQueueService.addEmitter(String.valueOf(shopId));
+    shopTopicRepository.enterShopId(String.valueOf(shopId));
+    SseEmitter emitter = redisSubscriber.addEmitter();
+    log.info("생성 : " + emitter);
+    return emitter;
   }
+
   @GetMapping("/popular")
   public ResponseEntity<CommonResponse<List<ShopResponseDto>>> getPopularShop() {
 
